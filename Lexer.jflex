@@ -30,6 +30,24 @@ import java_cup.runtime.*;
 
 %eofclose false
 
+%{
+    public long getChar() {
+	return yychar + 1;
+    }
+
+    public int getColumn() {
+    	return yycolumn + 1;
+    }
+
+    public int getLine() {
+	return yyline + 1;
+    }
+
+    public String getText() {
+	return yytext();
+    }
+%}
+
 
 NEWLINE = [\n\r]
 WHITESPACE = {cc}|[\t ]
@@ -41,15 +59,15 @@ ALPHANUM = {alpha}|{NUM}
 %%
 
 <YYINITIAL> {NEWLINE}    { yychar = 0; }
-<YYINITIAL> {WHITESPACE} { yychar = 0; }
+<YYINITIAL> {WHITESPACE} { // Skip whitespace }
 
 <YYINITIAL>	"+"		{return new Symbol(sym.PLUS);}
 <YYINITIAL>	"-"		{return new Symbol(sym.MINUS);}
 <YYINITIAL>	"*"		{return new Symbol(sym.MUL);}
 <YYINITIAL>	"/"		{return new Symbol(sym.DIV);}
 <YYINITIAL>	"%"		{return new Symbol(sym.MOD);}
-
-
+			    
+			    
 <YYINITIAL>	">"		{return new Symbol(sym.COND, Cmp.GT);}
 <YYINITIAL>	"<"		{return new Symbol(sym.COND, Cmp.LT);}
 <YYINITIAL>	">="	{return new Symbol(sym.COND, Cmp.GE);}
@@ -57,6 +75,11 @@ ALPHANUM = {alpha}|{NUM}
 <YYINITIAL>	"!="	{return new Symbol(sym.COND, Cmp.NE);}
 
 
-<YYINITIAL> {NUM}+.{NUM}* {return new Symbol(sym.INT, ConvertToFloat(yytext()));}
-<YYINITIAL> {NUM}+  {return new Symbol(sym.INT, ConvertToInteger(yytext()));}
+<YYINITIAL> {NUM}+.{NUM}*	{return new Symbol(sym.INT, ConvertToFloat(yytext()));}
+<YYINITIAL> {NUM}+			{return new Symbol(sym.INT, ConvertToInteger(yytext()));}
 
+
+<YYINITIAL> \S  { // error situation
+	       	   	  String msg = String.format("Unrecognised Token: %s", yytext());
+				  throw new TokenException(msg);
+				}

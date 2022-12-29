@@ -1,6 +1,5 @@
 import java_cup.runtime.*;
 
-
 %%
 
 %public
@@ -22,13 +21,6 @@ import java_cup.runtime.*;
 %cup
 %type java_cup.runtime.Symbol
 
-%throws TokenException
-
-%eofval{
-	return new Symbol(sym.EOF);
-%eofval}
-
-%eofclose false
 
 %{
     public long getChar() {
@@ -46,20 +38,34 @@ import java_cup.runtime.*;
     public String getText() {
 	return yytext();
     }
+
+	public int ConvertToInteger(String text)
+	{
+		return 0;
+	}
+
+	public float ConvertToFloat(String text)
+	{
+		return 0.0f;
+	}
+
 %}
 
 
+
+
 NEWLINE = [\n\r]
+cc = ([\b\f]|{NEWLINE})
 WHITESPACE = {cc}|[\t ]
 
-NUM = [0-9]
+DIGIT = [0-9]
 ALPHA = [a-zA-Z_]
 ALPHANUM = {alpha}|{NUM}
 
 %%
 
 <YYINITIAL> {NEWLINE}    { yychar = 0; }
-<YYINITIAL> {WHITESPACE} { // Skip whitespace }
+<YYINITIAL> {WHITESPACE} { }
 
 <YYINITIAL>	"+"		{return new Symbol(sym.PLUS);}
 <YYINITIAL>	"-"		{return new Symbol(sym.MINUS);}
@@ -68,18 +74,20 @@ ALPHANUM = {alpha}|{NUM}
 <YYINITIAL>	"%"		{return new Symbol(sym.MOD);}
 			    
 			    
-<YYINITIAL>	">"		{return new Symbol(sym.COND, Cmp.GT);}
-<YYINITIAL>	"<"		{return new Symbol(sym.COND, Cmp.LT);}
-<YYINITIAL>	">="	{return new Symbol(sym.COND, Cmp.GE);}
-<YYINITIAL>	"<="	{return new Symbol(sym.COND, Cmp.LE);}
-<YYINITIAL>	"!="	{return new Symbol(sym.COND, Cmp.NE);}
+<YYINITIAL>	">"		{return new Symbol(sym.GT);}
+<YYINITIAL>	"<"		{return new Symbol(sym.LT);}
+<YYINITIAL>	">="	{return new Symbol(sym.GE);}
+<YYINITIAL>	"<="	{return new Symbol(sym.LE);}
+<YYINITIAL>	"!="	{return new Symbol(sym.NE);}
+
+<YYINITIAL>	"("	{return new Symbol(sym.LPAREN);}
+<YYINITIAL>	")"	{return new Symbol(sym.RPAREN);}
+
+<YYINITIAL>	"{"	{return new Symbol(sym.LBRACE);}
+<YYINITIAL>	"}"	{return new Symbol(sym.RBRACE);}
 
 
-<YYINITIAL> {NUM}+.{NUM}*	{return new Symbol(sym.INT, ConvertToFloat(yytext()));}
-<YYINITIAL> {NUM}+			{return new Symbol(sym.INT, ConvertToInteger(yytext()));}
+<YYINITIAL> {DIGIT}+.{DIGIT}*	{return new Symbol(sym.INT, ConvertToFloat(yytext()));}
+<YYINITIAL> {DIGIT}+			{return new Symbol(sym.INT, ConvertToInteger(yytext()));}
 
-
-<YYINITIAL> \S  { // error situation
-	       	   	  String msg = String.format("Unrecognised Token: %s", yytext());
-				  throw new TokenException(msg);
-				}
+<YYINITIAL> . { throw new Error("Illegal character <" + yytext()+">"); }

@@ -24,18 +24,47 @@ parser code {:
 		}
 :};
 
-scan with {:
-	try{
-			return lexer.next_token();
-	}catch (java.io.IOException ioe) {
-		   System.out.println("Line " + lexer.getLine() + ", pos " + lexer.getChar() + ": Unrecognised token");
-		   System.out.println(ioe.getMessage());
-		   throw ioe;
-	}
-:};
+init with {:
+	  :};
 
+scan with {:
+		try {
+		    return lexer.next_token();
+		} catch (java.io.IOException ioe) {
+		    System.out.println("Line " + lexer.getLine() + ", pos " +
+				       lexer.getChar() +
+				       ": Unrecognised token");
+		    System.out.println(ioe.getMessage());
+		    throw ioe;
+		}
+	  :};
+
+
+// Incomplete
+terminal CHAR;
 
 terminal LPAREN, RPAREN, LBRACE, RBRACE;
 
 // Arithmetic operators
 terminal PLUS, MINUS, MUL, DIV, MOD;
+
+// Comparators
+terminal GT, LT, GE, LE, NE;
+
+// Types
+terminal Integer INT;
+terminal Boolean BOOL;
+
+non terminal Exp expression, term, factor;
+
+expression ::= expression:e PLUS  term:t {: :} |
+		   	   expression:e MINUS term:t {: :} |
+			   term:t {: :};
+
+term ::= term:t MUL factor:f {: :} |
+	 	 term:t DIV factor:f {: :} |
+		 factor:f {: :};
+
+factor ::= INT:i {: :} |
+	   	   BOOL:b {: :} |
+		   LPAREN expression:e RPAREN {: :};

@@ -22,6 +22,13 @@ import java_cup.runtime.*;
 %type java_cup.runtime.Symbol
 
 
+%eofval{
+	return new Symbol(sym.EOF);
+%eofval}
+
+%eofclose false
+
+
 %{
     public long getChar() {
 	return yychar + 1;
@@ -38,17 +45,34 @@ import java_cup.runtime.*;
     public String getText() {
 	return yytext();
     }
-
-	public int ConvertToInteger(String text)
+	
+	public double ParseDouble(String s)
 	{
-		return 0;
+		return Double.parseDouble(s);
 	}
 
-	public float ConvertToFloat(String text)
+	public int ParseInteger(String s)
 	{
-		return 0.0f;
+		return Integer.parseInt(s);
 	}
 
+	public int ParseBinaryToInteger(String s)
+	{
+		s = s.substring(2);
+		return Integer.parseInt(s, 2);
+	}
+
+	public int ParseHexToInteger(String s)
+	{
+		s = s.substring(2);
+		return Integer.parseInt(s, 16);
+	}
+
+	// TODO(afb) :: Consider making it a Character
+	public String ParseChar(String s)
+	{
+		return s.substring(2);
+	}
 %}
 
 
@@ -58,22 +82,25 @@ NEWLINE = [\n\r]
 cc = ([\b\f]|{NEWLINE})
 WHITESPACE = {cc}|[\t ]
 
+BINARY = [10]
+HEX = [0-9A-Fa-f]
 DIGIT = [0-9]
 ALPHA = [a-zA-Z_]
 ALPHANUM = {alpha}|{NUM}
+FLOAT = ({DIGIT}+\.{DIGIT}*)|({DIGIT}*.{DIGIT}+)
+CHAR = [A-Za-z]
 
 %%
 
 <YYINITIAL> {NEWLINE}    { yychar = 0; }
 <YYINITIAL> {WHITESPACE} { }
 
-<YYINITIAL>	"+"		{return new Symbol(sym.PLUS);}
-<YYINITIAL>	"-"		{return new Symbol(sym.MINUS);}
-<YYINITIAL>	"*"		{return new Symbol(sym.MUL);}
-<YYINITIAL>	"/"		{return new Symbol(sym.DIV);}
-<YYINITIAL>	"%"		{return new Symbol(sym.MOD);}
-			    
-			    
+<YYINITIAL>	" + "		{return new Symbol(sym.PLUS);}
+<YYINITIAL>	" - "		{return new Symbol(sym.MINUS);}
+<YYINITIAL>	" * "		{return new Symbol(sym.MUL);}
+<YYINITIAL>	" / "		{return new Symbol(sym.DIV);}
+<YYINITIAL>	" % "		{return new Symbol(sym.MOD);}
+			    			    
 <YYINITIAL>	">"		{return new Symbol(sym.GT);}
 <YYINITIAL>	"<"		{return new Symbol(sym.LT);}
 <YYINITIAL>	">="	{return new Symbol(sym.GE);}
@@ -86,8 +113,15 @@ ALPHANUM = {alpha}|{NUM}
 <YYINITIAL>	"{"	{return new Symbol(sym.LBRACE);}
 <YYINITIAL>	"}"	{return new Symbol(sym.RBRACE);}
 
+<YYINITIAL>	#c{CHAR}	{return new Symbol(sym.CHAR, ParseChar(yytext()));}
 
-<YYINITIAL> {DIGIT}+.{DIGIT}*	{return new Symbol(sym.INT, ConvertToFloat(yytext()));}
-<YYINITIAL> {DIGIT}+			{return new Symbol(sym.INT, ConvertToInteger(yytext()));}
+<YYINITIAL>	#t	{return new Symbol(sym.BOOL, true);}
+<YYINITIAL>	#f	{return new Symbol(sym.BOOL, false);}
+			
+<YYINITIAL> -?{FLOAT}	{return new Symbol(sym.INT, ParseDouble(yytext()));}
+
+<YYINITIAL> {DIGIT}+	{return new Symbol(sym.INT, ParseInteger(yytext()));}
+<YYINITIAL> #x{HEX}+	{return new Symbol(sym.INT, ParseHexToInteger(yytext()));}
+<YYINITIAL> #b{BINARY}+	{return new Symbol(sym.INT, ParseBinaryToInteger(yytext()));}
 
 <YYINITIAL> . { throw new Error("Illegal character <" + yytext()+">"); }

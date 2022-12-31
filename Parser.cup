@@ -57,6 +57,10 @@ terminal Boolean BOOL;
 
 non terminal Exp expression, term, factor;
 
+non terminal SmplProgram program;
+
+program ::= expression:e {: RESULT = new SmplProgram(e); :};
+
 expression ::= expression:e PLUS  term:t {: RESULT = new ExpAdd(e, t); :} |
 		   	   expression:e MINUS term:t {: RESULT = new ExpSub(e, t); :} |
 			   term:t {: RESULT = t; :};

@@ -1,7 +1,7 @@
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public abstract class Exp extends ASTNode
+public abstract class Exp extends ASTNode<Exp>
 {	
 	protected Exp(String name, Exp... subExps)
 	{

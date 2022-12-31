@@ -294,7 +294,7 @@ public class Lexer implements java_cup.runtime.Scanner {
 
   /* user code: */
     public long getChar() {
-	return yychar + 1;
+		return yychar + 1;
     }
 
     public int getColumn() {
@@ -302,11 +302,11 @@ public class Lexer implements java_cup.runtime.Scanner {
     }
 
     public int getLine() {
-	return yyline + 1;
+		return yyline + 1;
     }
 
     public String getText() {
-	return yytext();
+		return yytext();
     }
 	
 	public double ParseDouble(String s)
@@ -314,6 +314,7 @@ public class Lexer implements java_cup.runtime.Scanner {
 		return Double.parseDouble(s);
 	}
 
+	// TODO(afb) :: Add negative number parsing
 	public int ParseInteger(String s)
 	{
 		return Integer.parseInt(s);

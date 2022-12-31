@@ -31,7 +31,7 @@ import java_cup.runtime.*;
 
 %{
     public long getChar() {
-	return yychar + 1;
+		return yychar + 1;
     }
 
     public int getColumn() {
@@ -39,11 +39,11 @@ import java_cup.runtime.*;
     }
 
     public int getLine() {
-	return yyline + 1;
+		return yyline + 1;
     }
 
     public String getText() {
-	return yytext();
+		return yytext();
     }
 	
 	public double ParseDouble(String s)
@@ -51,6 +51,7 @@ import java_cup.runtime.*;
 		return Double.parseDouble(s);
 	}
 
+	// TODO(afb) :: Add negative number parsing
 	public int ParseInteger(String s)
 	{
 		return Integer.parseInt(s);

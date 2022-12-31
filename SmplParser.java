@@ -31,9 +31,10 @@ public class SmplParser extends java_cup.runtime.lr_parser {
   /** Production table. */
   protected static final short _production_table[][] = 
     unpackFromStrings(new String[] {
-    "\000\011\000\002\002\005\000\002\002\004\000\002\002" +
-    "\005\000\002\002\003\000\002\003\005\000\002\003\005" +
-    "\000\002\003\003\000\002\004\003\000\002\004\005" });
+    "\000\012\000\002\005\003\000\002\002\004\000\002\002" +
+    "\005\000\002\002\005\000\002\002\003\000\002\003\005" +
+    "\000\002\003\005\000\002\003\003\000\002\004\003\000" +
+    "\002\004\005" });
 
   /** Access to production table. */
   public short[][] production_table() {return _production_table;}
@@ -41,22 +42,23 @@ public class SmplParser extends java_cup.runtime.lr_parser {
   /** Parse-action table. */
   protected static final short[][] _action_table = 
     unpackFromStrings(new String[] {
-    "\000\021\000\006\005\006\023\010\001\002\000\016\002" +
-    "\ufffb\006\ufffb\011\ufffb\012\ufffb\013\ufffb\014\ufffb\001\002" +
-    "\000\016\002\ufffe\006\ufffe\011\ufffe\012\ufffe\013\015\014" +
-    "\016\001\002\000\006\005\006\023\010\001\002\000\010" +
-    "\002\013\011\011\012\012\001\002\000\016\002\ufffa\006" +
-    "\ufffa\011\ufffa\012\ufffa\013\ufffa\014\ufffa\001\002\000\006" +
-    "\005\006\023\010\001\002\000\006\005\006\023\010\001" +
-    "\002\000\004\002\000\001\002\000\016\002\uffff\006\uffff" +
-    "\011\uffff\012\uffff\013\015\014\016\001\002\000\006\005" +
-    "\006\023\010\001\002\000\006\005\006\023\010\001\002" +
-    "\000\016\002\ufffc\006\ufffc\011\ufffc\012\ufffc\013\ufffc\014" +
-    "\ufffc\001\002\000\016\002\ufffd\006\ufffd\011\ufffd\012\ufffd" +
-    "\013\ufffd\014\ufffd\001\002\000\016\002\001\006\001\011" +
-    "\001\012\001\013\015\014\016\001\002\000\010\006\023" +
-    "\011\011\012\012\001\002\000\016\002\ufff9\006\ufff9\011" +
-    "\ufff9\012\ufff9\013\ufff9\014\ufff9\001\002" });
+    "\000\022\000\006\005\007\023\011\001\002\000\004\002" +
+    "\024\001\002\000\016\002\ufffa\006\ufffa\011\ufffa\012\ufffa" +
+    "\013\ufffa\014\ufffa\001\002\000\016\002\ufffd\006\ufffd\011" +
+    "\ufffd\012\ufffd\013\015\014\016\001\002\000\006\005\007" +
+    "\023\011\001\002\000\010\002\001\011\012\012\013\001" +
+    "\002\000\016\002\ufff9\006\ufff9\011\ufff9\012\ufff9\013\ufff9" +
+    "\014\ufff9\001\002\000\006\005\007\023\011\001\002\000" +
+    "\006\005\007\023\011\001\002\000\016\002\ufffe\006\ufffe" +
+    "\011\ufffe\012\ufffe\013\015\014\016\001\002\000\006\005" +
+    "\007\023\011\001\002\000\006\005\007\023\011\001\002" +
+    "\000\016\002\ufffb\006\ufffb\011\ufffb\012\ufffb\013\ufffb\014" +
+    "\ufffb\001\002\000\016\002\ufffc\006\ufffc\011\ufffc\012\ufffc" +
+    "\013\ufffc\014\ufffc\001\002\000\016\002\uffff\006\uffff\011" +
+    "\uffff\012\uffff\013\015\014\016\001\002\000\010\006\023" +
+    "\011\012\012\013\001\002\000\016\002\ufff8\006\ufff8\011" +
+    "\ufff8\012\ufff8\013\ufff8\014\ufff8\001\002\000\004\002\000" +
+    "\001\002" });
 
   /** Access to parse-action table. */
   public short[][] action_table() {return _action_table;}
@@ -64,14 +66,14 @@ public class SmplParser extends java_cup.runtime.lr_parser {
   /** <code>reduce_goto</code> table. */
   protected static final short[][] _reduce_table = 
     unpackFromStrings(new String[] {
-    "\000\021\000\010\002\006\003\004\004\003\001\001\000" +
-    "\002\001\001\000\002\001\001\000\010\002\021\003\004" +
-    "\004\003\001\001\000\002\001\001\000\002\001\001\000" +
-    "\006\003\020\004\003\001\001\000\006\003\013\004\003" +
-    "\001\001\000\002\001\001\000\002\001\001\000\004\004" +
-    "\017\001\001\000\004\004\016\001\001\000\002\001\001" +
-    "\000\002\001\001\000\002\001\001\000\002\001\001\000" +
-    "\002\001\001" });
+    "\000\022\000\012\002\007\003\005\004\004\005\003\001" +
+    "\001\000\002\001\001\000\002\001\001\000\002\001\001" +
+    "\000\010\002\021\003\005\004\004\001\001\000\002\001" +
+    "\001\000\002\001\001\000\006\003\020\004\004\001\001" +
+    "\000\006\003\013\004\004\001\001\000\002\001\001\000" +
+    "\004\004\017\001\001\000\004\004\016\001\001\000\002" +
+    "\001\001\000\002\001\001\000\002\001\001\000\002\001" +
+    "\001\000\002\001\001\000\002\001\001" });
 
   /** Access to <code>reduce_goto</code> table. */
   public short[][] reduce_table() {return _reduce_table;}
@@ -179,7 +181,33 @@ class CUP$SmplParser$actions {
       switch (CUP$SmplParser$act_num)
         {
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 0: // expression ::= expression PLUS term 
+          case 0: // program ::= expression 
+            {
+              SmplProgram RESULT =null;
+		int eleft = ((java_cup.runtime.Symbol)CUP$SmplParser$stack.peek()).left;
+		int eright = ((java_cup.runtime.Symbol)CUP$SmplParser$stack.peek()).right;
+		Exp e = (Exp)((java_cup.runtime.Symbol) CUP$SmplParser$stack.peek()).value;
+		 RESULT = new SmplProgram(e); 
+              CUP$SmplParser$result = parser.getSymbolFactory().newSymbol("program",3, ((java_cup.runtime.Symbol)CUP$SmplParser$stack.peek()), ((java_cup.runtime.Symbol)CUP$SmplParser$stack.peek()), RESULT);
+            }
+          return CUP$SmplParser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 1: // $START ::= program EOF 
+            {
+              Object RESULT =null;
+		int start_valleft = ((java_cup.runtime.Symbol)CUP$SmplParser$stack.elementAt(CUP$SmplParser$top-1)).left;
+		int start_valright = ((java_cup.runtime.Symbol)CUP$SmplParser$stack.elementAt(CUP$SmplParser$top-1)).right;
+		SmplProgram start_val = (SmplProgram)((java_cup.runtime.Symbol) CUP$SmplParser$stack.elementAt(CUP$SmplParser$top-1)).value;
+		RESULT = start_val;
+              CUP$SmplParser$result = parser.getSymbolFactory().newSymbol("$START",0, ((java_cup.runtime.Symbol)CUP$SmplParser$stack.elementAt(CUP$SmplParser$top-1)), ((java_cup.runtime.Symbol)CUP$SmplParser$stack.peek()), RESULT);
+            }
+          /* ACCEPT */
+          CUP$SmplParser$parser.done_parsing();
+          return CUP$SmplParser$result;
+
+          /*. . . . . . . . . . . . . . . . . . . .*/
+          case 2: // expression ::= expression PLUS term 
             {
               Exp RESULT =null;
 		int eleft = ((java_cup.runtime.Symbol)CUP$SmplParser$stack.elementAt(CUP$SmplParser$top-2)).left;
@@ -194,21 +222,7 @@ class CUP$SmplParser$actions {
           return CUP$SmplParser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 1: // $START ::= expression EOF 
-            {
-              Object RESULT =null;
-		int start_valleft = ((java_cup.runtime.Symbol)CUP$SmplParser$stack.elementAt(CUP$SmplParser$top-1)).left;
-		int start_valright = ((java_cup.runtime.Symbol)CUP$SmplParser$stack.elementAt(CUP$SmplParser$top-1)).right;
-		Exp start_val = (Exp)((java_cup.runtime.Symbol) CUP$SmplParser$stack.elementAt(CUP$SmplParser$top-1)).value;
-		RESULT = start_val;
-              CUP$SmplParser$result = parser.getSymbolFactory().newSymbol("$START",0, ((java_cup.runtime.Symbol)CUP$SmplParser$stack.elementAt(CUP$SmplParser$top-1)), ((java_cup.runtime.Symbol)CUP$SmplParser$stack.peek()), RESULT);
-            }
-          /* ACCEPT */
-          CUP$SmplParser$parser.done_parsing();
-          return CUP$SmplParser$result;
-
-          /*. . . . . . . . . . . . . . . . . . . .*/
-          case 2: // expression ::= expression MINUS term 
+          case 3: // expression ::= expression MINUS term 
             {
               Exp RESULT =null;
 		int eleft = ((java_cup.runtime.Symbol)CUP$SmplParser$stack.elementAt(CUP$SmplParser$top-2)).left;
@@ -223,7 +237,7 @@ class CUP$SmplParser$actions {
           return CUP$SmplParser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 3: // expression ::= term 
+          case 4: // expression ::= term 
             {
               Exp RESULT =null;
 		int tleft = ((java_cup.runtime.Symbol)CUP$SmplParser$stack.peek()).left;
@@ -235,7 +249,7 @@ class CUP$SmplParser$actions {
           return CUP$SmplParser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 4: // term ::= term MUL factor 
+          case 5: // term ::= term MUL factor 
             {
               Exp RESULT =null;
 		int tleft = ((java_cup.runtime.Symbol)CUP$SmplParser$stack.elementAt(CUP$SmplParser$top-2)).left;
@@ -250,7 +264,7 @@ class CUP$SmplParser$actions {
           return CUP$SmplParser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 5: // term ::= term DIV factor 
+          case 6: // term ::= term DIV factor 
             {
               Exp RESULT =null;
 		int tleft = ((java_cup.runtime.Symbol)CUP$SmplParser$stack.elementAt(CUP$SmplParser$top-2)).left;
@@ -265,7 +279,7 @@ class CUP$SmplParser$actions {
           return CUP$SmplParser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 6: // term ::= factor 
+          case 7: // term ::= factor 
             {
               Exp RESULT =null;
 		int fleft = ((java_cup.runtime.Symbol)CUP$SmplParser$stack.peek()).left;
@@ -277,7 +291,7 @@ class CUP$SmplParser$actions {
           return CUP$SmplParser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 7: // factor ::= INT 
+          case 8: // factor ::= INT 
             {
               Exp RESULT =null;
 		int ileft = ((java_cup.runtime.Symbol)CUP$SmplParser$stack.peek()).left;
@@ -289,7 +303,7 @@ class CUP$SmplParser$actions {
           return CUP$SmplParser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 8: // factor ::= LPAREN expression RPAREN 
+          case 9: // factor ::= LPAREN expression RPAREN 
             {
               Exp RESULT =null;
 		int eleft = ((java_cup.runtime.Symbol)CUP$SmplParser$stack.elementAt(CUP$SmplParser$top-1)).left;

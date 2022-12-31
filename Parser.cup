@@ -57,14 +57,15 @@ terminal Boolean BOOL;
 
 non terminal Exp expression, term, factor;
 
-expression ::= expression:e PLUS  term:t {: :} |
-		   	   expression:e MINUS term:t {: :} |
-			   term:t {: :};
+expression ::= expression:e PLUS  term:t {: RESULT = new ExpAdd(e, t); :} |
+		   	   expression:e MINUS term:t {: RESULT = new ExpSub(e, t); :} |
+			   term:t {: RESULT = t; :};
 
-term ::= term:t MUL factor:f {: :} |
-	 	 term:t DIV factor:f {: :} |
-		 factor:f {: :};
+term ::= term:t MUL factor:f {: RESULT = new ExpMul(t, f); :} |
+	 	 term:t DIV factor:f {: RESULT = new ExpDiv(t, f); :} |
+		 factor:f {: RESULT = f; :};
 
-factor ::= INT:i {: :} |
-	   	   BOOL:b {: :} |
-		   LPAREN expression:e RPAREN {: :};
+factor ::= INT:i {: RESULT = new ExpLit(i); :} |
+		   LPAREN expression:e RPAREN {: RESULT = e; :};
+
+empty ::= ;

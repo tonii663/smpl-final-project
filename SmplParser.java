@@ -31,10 +31,9 @@ public class SmplParser extends java_cup.runtime.lr_parser {
   /** Production table. */
   protected static final short _production_table[][] = 
     unpackFromStrings(new String[] {
-    "\000\012\000\002\002\005\000\002\002\004\000\002\002" +
+    "\000\011\000\002\002\005\000\002\002\004\000\002\002" +
     "\005\000\002\002\003\000\002\003\005\000\002\003\005" +
-    "\000\002\003\003\000\002\004\003\000\002\004\003\000" +
-    "\002\004\005" });
+    "\000\002\003\003\000\002\004\003\000\002\004\005" });
 
   /** Access to production table. */
   public short[][] production_table() {return _production_table;}
@@ -42,24 +41,22 @@ public class SmplParser extends java_cup.runtime.lr_parser {
   /** Parse-action table. */
   protected static final short[][] _action_table = 
     unpackFromStrings(new String[] {
-    "\000\022\000\010\005\007\023\011\024\006\001\002\000" +
-    "\016\002\ufffb\006\ufffb\011\ufffb\012\ufffb\013\ufffb\014\ufffb" +
-    "\001\002\000\016\002\ufffe\006\ufffe\011\ufffe\012\ufffe\013" +
-    "\016\014\017\001\002\000\016\002\ufff9\006\ufff9\011\ufff9" +
-    "\012\ufff9\013\ufff9\014\ufff9\001\002\000\010\005\007\023" +
-    "\011\024\006\001\002\000\010\002\014\011\012\012\013" +
-    "\001\002\000\016\002\ufffa\006\ufffa\011\ufffa\012\ufffa\013" +
-    "\ufffa\014\ufffa\001\002\000\010\005\007\023\011\024\006" +
-    "\001\002\000\010\005\007\023\011\024\006\001\002\000" +
-    "\004\002\000\001\002\000\016\002\uffff\006\uffff\011\uffff" +
-    "\012\uffff\013\016\014\017\001\002\000\010\005\007\023" +
-    "\011\024\006\001\002\000\010\005\007\023\011\024\006" +
-    "\001\002\000\016\002\ufffc\006\ufffc\011\ufffc\012\ufffc\013" +
-    "\ufffc\014\ufffc\001\002\000\016\002\ufffd\006\ufffd\011\ufffd" +
-    "\012\ufffd\013\ufffd\014\ufffd\001\002\000\016\002\001\006" +
-    "\001\011\001\012\001\013\016\014\017\001\002\000\010" +
-    "\006\024\011\012\012\013\001\002\000\016\002\ufff8\006" +
-    "\ufff8\011\ufff8\012\ufff8\013\ufff8\014\ufff8\001\002" });
+    "\000\021\000\006\005\006\023\010\001\002\000\016\002" +
+    "\ufffb\006\ufffb\011\ufffb\012\ufffb\013\ufffb\014\ufffb\001\002" +
+    "\000\016\002\ufffe\006\ufffe\011\ufffe\012\ufffe\013\015\014" +
+    "\016\001\002\000\006\005\006\023\010\001\002\000\010" +
+    "\002\013\011\011\012\012\001\002\000\016\002\ufffa\006" +
+    "\ufffa\011\ufffa\012\ufffa\013\ufffa\014\ufffa\001\002\000\006" +
+    "\005\006\023\010\001\002\000\006\005\006\023\010\001" +
+    "\002\000\004\002\000\001\002\000\016\002\uffff\006\uffff" +
+    "\011\uffff\012\uffff\013\015\014\016\001\002\000\006\005" +
+    "\006\023\010\001\002\000\006\005\006\023\010\001\002" +
+    "\000\016\002\ufffc\006\ufffc\011\ufffc\012\ufffc\013\ufffc\014" +
+    "\ufffc\001\002\000\016\002\ufffd\006\ufffd\011\ufffd\012\ufffd" +
+    "\013\ufffd\014\ufffd\001\002\000\016\002\001\006\001\011" +
+    "\001\012\001\013\015\014\016\001\002\000\010\006\023" +
+    "\011\011\012\012\001\002\000\016\002\ufff9\006\ufff9\011" +
+    "\ufff9\012\ufff9\013\ufff9\014\ufff9\001\002" });
 
   /** Access to parse-action table. */
   public short[][] action_table() {return _action_table;}
@@ -67,14 +64,14 @@ public class SmplParser extends java_cup.runtime.lr_parser {
   /** <code>reduce_goto</code> table. */
   protected static final short[][] _reduce_table = 
     unpackFromStrings(new String[] {
-    "\000\022\000\010\002\007\003\004\004\003\001\001\000" +
-    "\002\001\001\000\002\001\001\000\002\001\001\000\010" +
-    "\002\022\003\004\004\003\001\001\000\002\001\001\000" +
-    "\002\001\001\000\006\003\021\004\003\001\001\000\006" +
-    "\003\014\004\003\001\001\000\002\001\001\000\002\001" +
-    "\001\000\004\004\020\001\001\000\004\004\017\001\001" +
+    "\000\021\000\010\002\006\003\004\004\003\001\001\000" +
+    "\002\001\001\000\002\001\001\000\010\002\021\003\004" +
+    "\004\003\001\001\000\002\001\001\000\002\001\001\000" +
+    "\006\003\020\004\003\001\001\000\006\003\013\004\003" +
+    "\001\001\000\002\001\001\000\002\001\001\000\004\004" +
+    "\017\001\001\000\004\004\016\001\001\000\002\001\001" +
     "\000\002\001\001\000\002\001\001\000\002\001\001\000" +
-    "\002\001\001\000\002\001\001" });
+    "\002\001\001" });
 
   /** Access to <code>reduce_goto</code> table. */
   public short[][] reduce_table() {return _reduce_table;}
@@ -191,7 +188,7 @@ class CUP$SmplParser$actions {
 		int tleft = ((java_cup.runtime.Symbol)CUP$SmplParser$stack.peek()).left;
 		int tright = ((java_cup.runtime.Symbol)CUP$SmplParser$stack.peek()).right;
 		Exp t = (Exp)((java_cup.runtime.Symbol) CUP$SmplParser$stack.peek()).value;
-		 
+		 RESULT = new ExpAdd(e, t); 
               CUP$SmplParser$result = parser.getSymbolFactory().newSymbol("expression",0, ((java_cup.runtime.Symbol)CUP$SmplParser$stack.elementAt(CUP$SmplParser$top-2)), ((java_cup.runtime.Symbol)CUP$SmplParser$stack.peek()), RESULT);
             }
           return CUP$SmplParser$result;
@@ -220,7 +217,7 @@ class CUP$SmplParser$actions {
 		int tleft = ((java_cup.runtime.Symbol)CUP$SmplParser$stack.peek()).left;
 		int tright = ((java_cup.runtime.Symbol)CUP$SmplParser$stack.peek()).right;
 		Exp t = (Exp)((java_cup.runtime.Symbol) CUP$SmplParser$stack.peek()).value;
-		 
+		 RESULT = new ExpSub(e, t); 
               CUP$SmplParser$result = parser.getSymbolFactory().newSymbol("expression",0, ((java_cup.runtime.Symbol)CUP$SmplParser$stack.elementAt(CUP$SmplParser$top-2)), ((java_cup.runtime.Symbol)CUP$SmplParser$stack.peek()), RESULT);
             }
           return CUP$SmplParser$result;
@@ -232,7 +229,7 @@ class CUP$SmplParser$actions {
 		int tleft = ((java_cup.runtime.Symbol)CUP$SmplParser$stack.peek()).left;
 		int tright = ((java_cup.runtime.Symbol)CUP$SmplParser$stack.peek()).right;
 		Exp t = (Exp)((java_cup.runtime.Symbol) CUP$SmplParser$stack.peek()).value;
-		 
+		 RESULT = t; 
               CUP$SmplParser$result = parser.getSymbolFactory().newSymbol("expression",0, ((java_cup.runtime.Symbol)CUP$SmplParser$stack.peek()), ((java_cup.runtime.Symbol)CUP$SmplParser$stack.peek()), RESULT);
             }
           return CUP$SmplParser$result;
@@ -247,7 +244,7 @@ class CUP$SmplParser$actions {
 		int fleft = ((java_cup.runtime.Symbol)CUP$SmplParser$stack.peek()).left;
 		int fright = ((java_cup.runtime.Symbol)CUP$SmplParser$stack.peek()).right;
 		Exp f = (Exp)((java_cup.runtime.Symbol) CUP$SmplParser$stack.peek()).value;
-		 
+		 RESULT = new ExpMul(t, f); 
               CUP$SmplParser$result = parser.getSymbolFactory().newSymbol("term",1, ((java_cup.runtime.Symbol)CUP$SmplParser$stack.elementAt(CUP$SmplParser$top-2)), ((java_cup.runtime.Symbol)CUP$SmplParser$stack.peek()), RESULT);
             }
           return CUP$SmplParser$result;
@@ -262,7 +259,7 @@ class CUP$SmplParser$actions {
 		int fleft = ((java_cup.runtime.Symbol)CUP$SmplParser$stack.peek()).left;
 		int fright = ((java_cup.runtime.Symbol)CUP$SmplParser$stack.peek()).right;
 		Exp f = (Exp)((java_cup.runtime.Symbol) CUP$SmplParser$stack.peek()).value;
-		 
+		 RESULT = new ExpDiv(t, f); 
               CUP$SmplParser$result = parser.getSymbolFactory().newSymbol("term",1, ((java_cup.runtime.Symbol)CUP$SmplParser$stack.elementAt(CUP$SmplParser$top-2)), ((java_cup.runtime.Symbol)CUP$SmplParser$stack.peek()), RESULT);
             }
           return CUP$SmplParser$result;
@@ -274,7 +271,7 @@ class CUP$SmplParser$actions {
 		int fleft = ((java_cup.runtime.Symbol)CUP$SmplParser$stack.peek()).left;
 		int fright = ((java_cup.runtime.Symbol)CUP$SmplParser$stack.peek()).right;
 		Exp f = (Exp)((java_cup.runtime.Symbol) CUP$SmplParser$stack.peek()).value;
-		 
+		 RESULT = f; 
               CUP$SmplParser$result = parser.getSymbolFactory().newSymbol("term",1, ((java_cup.runtime.Symbol)CUP$SmplParser$stack.peek()), ((java_cup.runtime.Symbol)CUP$SmplParser$stack.peek()), RESULT);
             }
           return CUP$SmplParser$result;
@@ -286,31 +283,19 @@ class CUP$SmplParser$actions {
 		int ileft = ((java_cup.runtime.Symbol)CUP$SmplParser$stack.peek()).left;
 		int iright = ((java_cup.runtime.Symbol)CUP$SmplParser$stack.peek()).right;
 		Integer i = (Integer)((java_cup.runtime.Symbol) CUP$SmplParser$stack.peek()).value;
-		 
+		 RESULT = new ExpLit(i); 
               CUP$SmplParser$result = parser.getSymbolFactory().newSymbol("factor",2, ((java_cup.runtime.Symbol)CUP$SmplParser$stack.peek()), ((java_cup.runtime.Symbol)CUP$SmplParser$stack.peek()), RESULT);
             }
           return CUP$SmplParser$result;
 
           /*. . . . . . . . . . . . . . . . . . . .*/
-          case 8: // factor ::= BOOL 
-            {
-              Exp RESULT =null;
-		int bleft = ((java_cup.runtime.Symbol)CUP$SmplParser$stack.peek()).left;
-		int bright = ((java_cup.runtime.Symbol)CUP$SmplParser$stack.peek()).right;
-		Boolean b = (Boolean)((java_cup.runtime.Symbol) CUP$SmplParser$stack.peek()).value;
-		 
-              CUP$SmplParser$result = parser.getSymbolFactory().newSymbol("factor",2, ((java_cup.runtime.Symbol)CUP$SmplParser$stack.peek()), ((java_cup.runtime.Symbol)CUP$SmplParser$stack.peek()), RESULT);
-            }
-          return CUP$SmplParser$result;
-
-          /*. . . . . . . . . . . . . . . . . . . .*/
-          case 9: // factor ::= LPAREN expression RPAREN 
+          case 8: // factor ::= LPAREN expression RPAREN 
             {
               Exp RESULT =null;
 		int eleft = ((java_cup.runtime.Symbol)CUP$SmplParser$stack.elementAt(CUP$SmplParser$top-1)).left;
 		int eright = ((java_cup.runtime.Symbol)CUP$SmplParser$stack.elementAt(CUP$SmplParser$top-1)).right;
 		Exp e = (Exp)((java_cup.runtime.Symbol) CUP$SmplParser$stack.elementAt(CUP$SmplParser$top-1)).value;
-		 
+		 RESULT = e; 
               CUP$SmplParser$result = parser.getSymbolFactory().newSymbol("factor",2, ((java_cup.runtime.Symbol)CUP$SmplParser$stack.elementAt(CUP$SmplParser$top-2)), ((java_cup.runtime.Symbol)CUP$SmplParser$stack.peek()), RESULT);
             }
           return CUP$SmplParser$result;

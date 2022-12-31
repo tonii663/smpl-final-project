@@ -15,3 +15,11 @@ java -Xmx128m -jar <cup jar file> -parser SmplParser Parser.cup
 ``` console
 java -classpath <path to cup> Main <filename>
 ```
+
+### Example (Windows)
+``` console
+jflex Lexer.jflex
+java  -Xmx128m -jar w:\_Libraries\cup\java-cup-11b.jar -parser SmplParser Parser.cup
+javac -classpath ".;w:\_Libraries\cup\java-cup-11b.jar" *.java
+java  -classpath ".;w:\_Libraries\cup\java-cup-11b.jar" Main tests\input*.txt
+```

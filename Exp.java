@@ -1,13 +1,15 @@
 import java.util.ArrayList;
+import java.util.Arrays;
 
-
-public abstract class Exp
-{
-	protected Exp(String name, Exp... subExps) {
-		// super(name, subExps);
+public abstract class Exp extends ASTNode
+{	
+	protected Exp(String name, Exp... subExps)
+	{
+		super(name, subExps);
     }
 
-    protected Exp(String name, ArrayList<Exp> subExps) {
-		// super(name, subExps);
+    protected Exp(String name, ArrayList<Exp> subExps)
+	{
+		super(name, subExps);
     }
 }

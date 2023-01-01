@@ -103,7 +103,7 @@ public class Main
 
 	public static void parseWalkShow(Reader reader, Walker walker)
 	{
-		int result = walker.run(reader);
+		Double result = walker.run(reader);
 		System.out.println("Result: " + result);
     }
 

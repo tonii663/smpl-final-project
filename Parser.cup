@@ -40,26 +40,37 @@ scan with {:
 	  :};
 
 
-// Incomplete
-terminal CHAR;
 
-terminal LPAREN, RPAREN, LBRACE, RBRACE;
+terminal LPAREN, RPAREN, LBRACE, RBRACE, LBRACKET, RBRACKET, LB_COLON, RB_COLON;
+terminal IS_PAIR, PAIR, CAR, CDR, LIST, SIZE, EQV, EQL, SUBSTR, DEF, PROC;
 
 // Arithmetic operators
 terminal PLUS, MINUS, MUL, DIV, MOD;
+terminal AND, OR, NOT;
+terminal BIT_AND, BIT_OR, BIT_NOT;
+terminal SEMI, AT;
 
 // Comparators
 terminal GT, LT, GE, LE, NE;
 
 // Types
 terminal Integer INT;
-terminal Boolean BOOL;
+terminal Double DOUBLE;
+terminal Boolean TRUE;
+terminal Boolean FALSE;
+terminal Character CHAR;
 
 non terminal Exp expression, term, factor;
-
+non terminal Statement stmt;
+non terminal StatementSequence stmtList;
 non terminal SmplProgram program;
 
-program ::= expression:e {: RESULT = new SmplProgram(e); :};
+program ::= stmtList:seq {: RESULT = new SmplProgram(seq); :};
+
+stmtList ::= stmtList:seq stmt:s {: RESULT = seq.add(s); :} | 
+			 stmt:s {: RESULT = new StatementSequence(s); :};
+			 
+stmt ::= expression:e SEMI {: RESULT = new Statement(e); :};
 
 expression ::= expression:e PLUS  term:t {: RESULT = new ExpAdd(e, t); :} |
 		   	   expression:e MINUS term:t {: RESULT = new ExpSub(e, t); :} |
@@ -67,9 +78,12 @@ expression ::= expression:e PLUS  term:t {: RESULT = new ExpAdd(e, t); :} |
 
 term ::= term:t MUL factor:f {: RESULT = new ExpMul(t, f); :} |
 	 	 term:t DIV factor:f {: RESULT = new ExpDiv(t, f); :} |
+		 term:t MOD factor:f {: RESULT = new ExpMod(t, f); :} |
 		 factor:f {: RESULT = f; :};
 
-factor ::= INT:i {: RESULT = new ExpLit(i); :} |
-		   LPAREN expression:e RPAREN {: RESULT = e; :};
+factor ::= INT:v {: RESULT = new SmplInteger(v); :} |
+	   	   DOUBLE:v {: RESULT = new SmplDouble(v); :} |
+		   LPAREN expression:e RPAREN {: RESULT = e; :} |
+		   LPAREN MINUS expression:e RPAREN {: RESULT = new ExpSub(new SmplDouble(0.0), e); :};
 
 empty ::= ;

@@ -37,5 +37,5 @@ public abstract class ASTNode<E extends ASTNode>
 		return name;
     }
 
-	public abstract int visit(Visitor v);
+	public abstract Double visit(Visitor v);
 }

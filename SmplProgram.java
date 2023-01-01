@@ -1,17 +1,17 @@
-public class SmplProgram extends ASTNode<Exp>
+public class SmplProgram extends ASTNode<StatementSequence>
 {
 	
-    public SmplProgram(Exp e)
+    public SmplProgram(StatementSequence seq)
 	{
-		super("program", e);
+		super("program", seq);
     }
 
-    public Exp getSeq()
+    public StatementSequence getSeq()
 	{
 		return getSubTree(0);
     }
 
-    public int visit(Visitor v)
+    public Double visit(Visitor v)
 	{
 		return v.visitSmplProgram(this);
     }

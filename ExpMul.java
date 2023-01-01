@@ -5,7 +5,7 @@ public class ExpMul extends ExpBinaryOperator
 		super("*", e1, e2);
     }
 
-    public int visit(Visitor v)
+    public Double visit(Visitor v)
 	{
 		return v.visitExpMul(this);
     }

@@ -1,22 +1,24 @@
 // TODO(afb) :: Should we make this abstract and create a subclass
 // for each type?
 
-public class ExpLit extends Exp
+public abstract class ExpLit<T> extends Exp
 {
-    int val;
+    protected T value;
 	
-    public ExpLit(Integer v)
+    public ExpLit(T v)
 	{
 		super(v.toString());
-		val = v.intValue();
+		this.value = v;
     }
 
-    public int getVal()
+	public T getLit()
 	{
-		return val;
-    }
-
-    public int visit(Visitor v)
+		return value;
+	}
+    
+	public abstract Double getValue();
+	
+    public Double visit(Visitor v)
 	{
 		return v.visitExpLit(this);
     }

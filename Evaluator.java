@@ -2,48 +2,74 @@ import java.util.*;
 
 public class Evaluator implements Visitor
 {
-	public int visitSmplProgram(SmplProgram program)
+	public Double visitSmplProgram(SmplProgram program)
 	{
 		return program.getSeq().visit(this);
 	}
-	
-	public int visitExpAdd(ExpAdd exp)
+
+	public Double visitStatement(Statement stmt)
 	{
-		int val1, val2;
+		return stmt.getExp().visit(this);
+	}
+	
+	public Double visitStatementSequence(StatementSequence seq)
+	{
+		ArrayList<Exp> stmts = seq.getSeq();
+
+		Double result = 0.0;
+		for(int stmtIndex = 0; stmtIndex < stmts.size(); stmtIndex++)
+		{
+			result = stmts.get(stmtIndex).visit(this);
+		}
+		return result;
+	}
+
+	public Double visitExpAdd(ExpAdd exp)
+	{
+		Double val1, val2;
 		val1 = exp.getLeftExp().visit(this);
 		val2 = exp.getRightExp().visit(this);
 		return val1 + val2;
 	}
 	
 
-	public int visitExpSub(ExpSub exp)
+	public Double visitExpSub(ExpSub exp)
 	{
-		int val1, val2;
+		Double val1, val2;
 		val1 = exp.getLeftExp().visit(this);
 		val2 = exp.getRightExp().visit(this);
 		return val1 - val2;
 	}
 	
-    public int visitExpMul(ExpMul exp)
+    public Double visitExpMul(ExpMul exp)
 	{
-		int val1, val2;
+		Double val1, val2;
 		val1 = exp.getLeftExp().visit(this);
 		val2 = exp.getRightExp().visit(this);
 		return val1 * val2;
 	}
 	
-    public int visitExpDiv(ExpDiv exp)
+    public Double visitExpDiv(ExpDiv exp)
 	{
-		int val1, val2;
+		Double val1, val2;
 		val1 = exp.getLeftExp().visit(this);
 		val2 = exp.getRightExp().visit(this);
 		return val1 / val2;
 
 	}
-	
-    public int visitExpLit(ExpLit exp)
+
+	public Double visitExpMod(ExpMod exp)
 	{
-		return exp.getVal();	
+		Double val1, val2;
+		val1 = exp.getLeftExp().visit(this);
+		val2 = exp.getRightExp().visit(this);
+		return val1 % val2;
+
+	}
+
+    public Double visitExpLit(ExpLit exp)
+	{
+		return exp.getValue();
 	}
 
 }

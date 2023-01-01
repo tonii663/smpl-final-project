@@ -19,12 +19,12 @@ public abstract class Walker
 
 
 	// NOTE(afb) :: Given a AST it walks it.
-    public int walk(ASTNode<? extends ASTNode> expr)
+    public Double walk(ASTNode<? extends ASTNode> expr)
 	{
 		return expr.visit(visitor);
     }
 	
-    public int run(Reader reader)
+    public Double run(Reader reader)
 	{
 		parser = new SmplParser(new Lexer(reader));
 		SmplProgram program;
@@ -36,10 +36,10 @@ public abstract class Walker
 		catch(Exception e)
 		{
 			System.out.println(e.getMessage());
-			return -1;
+			return -1.0;
 		}
 		
-		int result = walk(program);
+		Double result = walk(program);
 		return result;
 	}
 

@@ -1,30 +1,31 @@
 import java.io.Reader;
 import java.io.StringReader;
 
-public abstract class Walker
+public abstract class Walker<S, T>
 {
-    private Visitor visitor;
 	private SmplParser parser;
-
+    private Visitor<S, T>  visitor;	
+	private S state;
 	
-    public Walker(Visitor visitor)
+    public Walker(Visitor<S, T> visitor)
 	{
 		this.visitor = visitor;
+		this.state = visitor.getDefaultState();
     }
 
-    public Visitor getVisitor()
+    public Visitor<S, T> getVisitor()
 	{
 		return visitor;
     }
 
 
 	// NOTE(afb) :: Given a AST it walks it.
-    public Double walk(ASTNode<? extends ASTNode> expr)
+    public T walk(ASTNode<? extends ASTNode> expr)
 	{
-		return expr.visit(visitor);
+		return expr.visit(visitor, state);
     }
 	
-    public Double run(Reader reader)
+    public T run(Reader reader)
 	{
 		parser = new SmplParser(new Lexer(reader));
 		SmplProgram program;
@@ -36,10 +37,10 @@ public abstract class Walker
 		catch(Exception e)
 		{
 			System.out.println(e.getMessage());
-			return -1.0;
+			return null;
 		}
 		
-		Double result = walk(program);
+		T result = walk(program);
 		return result;
 	}
 

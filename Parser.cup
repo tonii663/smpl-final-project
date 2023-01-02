@@ -51,9 +51,10 @@ terminal BIT_AND, BIT_OR, BIT_NOT;
 terminal SEMI, AT;
 
 // Comparators
-terminal GT, LT, GE, LE, NE;
+terminal GT, LT, GE, LE, NE, ASSIGN;
 
 // Types
+terminal String VAR;
 terminal Integer INT;
 terminal Double DOUBLE;
 terminal Boolean TRUE;
@@ -63,14 +64,19 @@ terminal Character CHAR;
 non terminal Exp expression, term, factor;
 non terminal Statement stmt;
 non terminal StatementSequence stmtList;
+non terminal StatementDefinition definition;
 non terminal SmplProgram program;
+
 
 program ::= stmtList:seq {: RESULT = new SmplProgram(seq); :};
 
 stmtList ::= stmtList:seq stmt:s {: RESULT = seq.add(s); :} | 
 			 stmt:s {: RESULT = new StatementSequence(s); :};
 			 
-stmt ::= expression:e SEMI {: RESULT = new Statement(e); :};
+stmt ::= expression:e SEMI {: RESULT = new Statement(e); :} |
+	 	 definition:d {: RESULT = d; :};
+
+definition ::= VAR:var ASSIGN expression:e SEMI {: RESULT = new StatementDefinition(var, e); :};
 
 expression ::= expression:e PLUS  term:t {: RESULT = new ExpAdd(e, t); :} |
 		   	   expression:e MINUS term:t {: RESULT = new ExpSub(e, t); :} |
@@ -81,9 +87,10 @@ term ::= term:t MUL factor:f {: RESULT = new ExpMul(t, f); :} |
 		 term:t MOD factor:f {: RESULT = new ExpMod(t, f); :} |
 		 factor:f {: RESULT = f; :};
 
-factor ::= INT:v {: RESULT = new SmplInteger(v); :} |
-	   	   DOUBLE:v {: RESULT = new SmplDouble(v); :} |
+factor ::= INT:v {: RESULT = new ExpLit(v, "INT"); :} |
+	   	   DOUBLE:v {: RESULT = new ExpLit(v, "DOUBLE"); :} |
+		   VAR:var {: RESULT = new ExpVar(var); :} |		   
 		   LPAREN expression:e RPAREN {: RESULT = e; :} |
-		   LPAREN MINUS expression:e RPAREN {: RESULT = new ExpSub(new SmplDouble(0.0), e); :};
+		   LPAREN MINUS expression:e RPAREN {: RESULT = new ExpSub(new ExpLit(0.0, "DOUBLE"), e); :};
 
 empty ::= ;

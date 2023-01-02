@@ -5,7 +5,7 @@ import java.util.ArrayList;
 
 public class Main
 {
-    public static void main(String args[])
+    public static <S, T> void main(String args[])
 	{
 		int argsCount = args.length;
 		if(argsCount == 0)
@@ -21,7 +21,12 @@ public class Main
 			filenames.add(arg);
 		}
 
-		Walker walker = new SmplInterpreter();
+		Walker<Environment<Object>, Object> walker = new SmplInterpreter();
+
+		// NOTE(afb) :: Java retardation
+		// Class<? extends Walker<S, T>> wclass =
+		// (Class<? extends Walker<S, T>>) Class.forName("SmplInterpreter");
+		// walker = (wclass.newInstance());
 
 		for (String filename : filenames)
 		{
@@ -53,7 +58,7 @@ public class Main
 	}
 
 
-	private static void readLines(Reader in, Walker walker)
+	private static <S, T> void readLines(Reader in, Walker<S, T> walker)
 	{
 		LineNumberReader scanner = null;
 		try
@@ -78,6 +83,7 @@ public class Main
 					{
 						parseWalkShow(new StringReader(input.toString()),
 									  walker);
+						
 						input.delete(0, input.length());
 					}
 				}
@@ -101,10 +107,10 @@ public class Main
 
 	}
 
-	public static void parseWalkShow(Reader reader, Walker walker)
+	public static <S, T> void parseWalkShow(Reader reader, Walker<S, T> walker)
 	{
-		Double result = walker.run(reader);
-		System.out.println("Result: " + result);
+		T result = walker.run(reader);
+		System.out.println("Result: " + result.toString());
     }
 
 }

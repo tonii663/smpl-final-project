@@ -23,9 +23,9 @@ public class StatementSequence extends Statement {
 		return this;
     }
 
-    public Double visit(Visitor v)
+    public <S, T> T visit(Visitor<S, T> v, S state)
 	{
-		return v.visitStatementSequence(this);
+		return v.visitStatementSequence(this, state);
     }
 
 }

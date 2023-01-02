@@ -6,9 +6,9 @@ public class ExpAdd extends ExpBinaryOperator
 		super("+", e1, e2);
     }
 
-    public Double visit(Visitor v)
+    public <S, T> T visit(Visitor<S, T> v, S state)
 	{
-		return v.visitExpAdd(this);
+		return v.visitExpAdd(this, state);
     }
 
 }

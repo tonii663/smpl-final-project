@@ -1,4 +1,4 @@
-public class SmplInterpreter extends Walker
+public class SmplInterpreter extends Walker<Environment<Object>, Object>
 {
 	public SmplInterpreter()
 	{

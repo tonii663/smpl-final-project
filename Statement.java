@@ -22,8 +22,8 @@ public class Statement extends Exp {
 		return getSubTree(0);
     }
 
-    public Double visit(Visitor v)
+    public <S, T> T visit(Visitor<S, T> v, S state)
 	{
-		return v.visitStatement(this);
+		return v.visitStatement(this, state);
     }
 }

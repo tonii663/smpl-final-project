@@ -7,16 +7,16 @@
 public class sym {
   /* terminals */
   public static final int LBRACKET = 6;
-  public static final int CHAR = 43;
+  public static final int CHAR = 45;
   public static final int GE = 36;
   public static final int BIT_NOT = 31;
   public static final int BIT_AND = 29;
   public static final int CAR = 12;
-  public static final int DOUBLE = 40;
+  public static final int DOUBLE = 42;
   public static final int CDR = 13;
   public static final int LPAREN = 2;
   public static final int SEMI = 32;
-  public static final int INT = 39;
+  public static final int INT = 41;
   public static final int MINUS = 22;
   public static final int RPAREN = 3;
   public static final int NOT = 28;
@@ -26,10 +26,11 @@ public class sym {
   public static final int OR = 27;
   public static final int DIV = 24;
   public static final int PLUS = 21;
+  public static final int ASSIGN = 39;
   public static final int LE = 37;
   public static final int EOF = 0;
   public static final int RBRACKET = 7;
-  public static final int TRUE = 41;
+  public static final int TRUE = 43;
   public static final int SIZE = 15;
   public static final int error = 1;
   public static final int MUL = 23;
@@ -48,8 +49,9 @@ public class sym {
   public static final int DEF = 19;
   public static final int BIT_OR = 30;
   public static final int AT = 33;
-  public static final int FALSE = 42;
+  public static final int FALSE = 44;
   public static final int GT = 34;
+  public static final int VAR = 40;
   public static final String[] terminalNames = new String[] {
   "EOF",
   "error",
@@ -90,6 +92,8 @@ public class sym {
   "GE",
   "LE",
   "NE",
+  "ASSIGN",
+  "VAR",
   "INT",
   "DOUBLE",
   "TRUE",

@@ -87,8 +87,8 @@ DIGIT = [0-9]
 ALPHA = [a-zA-Z_]
 ALPHANUM = {alpha}|{NUM}
 DOUBLE = ({DIGIT}+\.{DIGIT}*)|({DIGIT}*.{DIGIT}+)
-CHAR = [A-Za-z]
-
+CHAR = [A-Za-z_]
+ID = {CHAR}+
 %%
 
 <YYINITIAL> {NEWLINE}    { yychar = 0; }
@@ -103,7 +103,8 @@ CHAR = [A-Za-z]
 <YYINITIAL> "&"		{return new Symbol(sym.BIT_AND);}
 <YYINITIAL> "|"		{return new Symbol(sym.BIT_OR);}
 <YYINITIAL> "~"		{return new Symbol(sym.BIT_NOT);}
-                            
+
+<YYINITIAL> ":="	{return new Symbol(sym.ASSIGN);}                            
 <YYINITIAL> ">"		{return new Symbol(sym.GT);}
 <YYINITIAL> "<"		{return new Symbol(sym.LT);}
 <YYINITIAL> ">="	{return new Symbol(sym.GE);}
@@ -142,10 +143,12 @@ CHAR = [A-Za-z]
 
 <YYINITIAL> #t  {return new Symbol(sym.TRUE, true);}
 <YYINITIAL> #f  {return new Symbol(sym.FALSE, false);}
-            
+
 <YYINITIAL> [-]?{DIGIT}+ {return new Symbol(sym.INT, ParseInteger(yytext()));}
 
 <YYINITIAL> #x{HEX}+    {return new Symbol(sym.INT, ParseHexToInteger(yytext()));}
 <YYINITIAL> #b{BINARY}+     {return new Symbol(sym.INT, ParseBinaryToInteger(yytext()));}
+
+<YYINITIAL> {ID}  {return new Symbol(sym.VAR, yytext());}
 
 <YYINITIAL> . { throw new Error("Illegal character <" + yytext()+">"); }

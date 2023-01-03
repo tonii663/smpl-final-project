@@ -7,6 +7,19 @@ public class SmplVector extends SmplType<Vector>
 		super(value);
 	}
 
+	
+	public SmplType index(SmplType v)
+	{
+		if(v instanceof SmplInteger)
+		{
+			
+			Integer i = (Integer)v.getValue();
+			return ((Vector)getValue()).getAt(i);
+		}
+
+		System.out.println(v.getClass().getName());
+		throw new TypeException();
+	}
 
 	public SmplType size()
 	{

@@ -93,6 +93,11 @@ public abstract class SmplType<T>
 		throw new TypeException();
 	}
 
+	public SmplType index(SmplType v) throws TypeException
+	{
+		throw new TypeException();
+	}
+
 	public SmplType car() throws TypeException
 	{
 		throw new TypeException();
@@ -105,7 +110,12 @@ public abstract class SmplType<T>
 
 	public SmplType isPair()
 	{
-		return new  SmplBoolean(false);
+		return new SmplBoolean(false);
+	}
+
+	public SmplType isNil()
+	{
+		return new SmplBoolean(false);
 	}
 
 }

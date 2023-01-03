@@ -80,6 +80,7 @@ non terminal ExpFuncCall funcCall;
 non terminal ArrayList<Exp> argList;
 non terminal ArrayList<Exp> argListE;
 
+non terminal Exp list;
 non terminal Exp pair;
 non terminal Exp vector;
 non terminal ArrayList<Exp> vectorBody;
@@ -114,8 +115,10 @@ paramList ::= paramList:seq COMMA VAR:v  {: seq.add(v); RESULT = seq; :} |
 definition ::= VAR:var ASSIGN expression:e SEMI {: RESULT = new StatementDefinition(var, e); :};
 
 expression ::= expression:e PLUS  term:t {: RESULT = new ExpAdd(e, t); :} |
-		   	   expression:e MINUS term:t {: RESULT = new ExpSub(e, t); :} |
+		   	   expression:e MINUS term:t {: RESULT = new ExpSub(e, t); :} |			   
 			   boolExp:b {: RESULT = b; :};
+
+// expression:e LBRACKET expression:i RBRACKET {: RESULT = new ExpOps("index", e, i); :} |
 
 funcCall ::= VAR:v LPAREN argListE:aList RPAREN {: RESULT = new ExpFuncCall(v, aList); :};
 
@@ -148,16 +151,22 @@ factor ::= funcCall:f {: RESULT = f; :} |
 		   bool:b {: RESULT = b; :} |
 		   pair:p {: RESULT = p; :} |
 		   vector:v {: RESULT = v; :} |
+		   list:l {: RESULT = l; :} |
 		   ops:o {: RESULT = o; :} |
 		   VAR:var {: RESULT = new ExpVar(var); :} |
 		   LPAREN expression:e RPAREN {: RESULT = e; :} |		   
 		   LPAREN MINUS expression:e RPAREN {: :};
 
-ops ::= SIZE LPAREN expression:e RPAREN {: RESULT = new ExpOps(e, "size"); :} |
-		CAR LPAREN expression:e RPAREN {: RESULT = new ExpOps(e, "car"); :} |
-		CDR LPAREN expression:e RPAREN {: RESULT = new ExpOps(e, "cdr"); :} |
-		IS_PAIR LPAREN expression:e RPAREN {: RESULT = new ExpOps(e, "is-pair"); :};
+ops ::= SIZE LPAREN expression:e RPAREN {: RESULT = new ExpOps("size", e); :} |
+		CAR LPAREN expression:e RPAREN {: RESULT = new ExpOps("car", e); :} |
+		CDR LPAREN expression:e RPAREN {: RESULT = new ExpOps("cdr", e); :} |
+		IS_PAIR LPAREN expression:e RPAREN {: RESULT = new ExpOps("is-pair", e); :};		
 
+list ::= LBRACKET argListE:aList RBRACKET
+	   	 {: RESULT = new ExpLit(aList, "smpl-list"); :} |
+		 LIST LPAREN argListE:aList RPAREN
+		 {: RESULT = new ExpLit(aList, "smpl-list"); :};
+		   
 vector ::= LB_COLON argListE:aList RB_COLON
 	   	   {: RESULT = new ExpLit(aList, "smpl-vector"); :};
 

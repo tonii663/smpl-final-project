@@ -177,6 +177,11 @@ public class Evaluator implements Visitor<Environment<SmplType>, SmplType>
 				return exp.getSubTree(0).visit(this, state).isPair();
 			}
 
+			case("index"):
+			{
+				return exp.getSubTree(0).visit(this, state).index(exp.getSubTree(0).visit(this, state));
+			}
+
 			default:
 			{
 				// TODO(afb) :: Error handling
@@ -228,6 +233,19 @@ public class Evaluator implements Visitor<Environment<SmplType>, SmplType>
 				}
 
 				return new SmplVector(new Vector(result));
+			}
+
+			case("smpl-list"):
+			{				
+				ArrayList<Exp> r = (ArrayList<Exp>)(exp.getValue());
+				ArrayList<SmplType> result = new ArrayList<SmplType>();
+
+				for(Exp a : r)
+				{
+					result.add(a.visit(this, state));
+				}
+
+				return new SmplList(new List(result));
 			}
 
 			default:

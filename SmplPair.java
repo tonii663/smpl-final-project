@@ -6,6 +6,16 @@ public class SmplPair extends SmplType<Pair>
 	{
 		super(value);
 	}
+
+	public SmplPair(SmplType v1, SmplType v2)
+	{
+		super(new Pair(v1, v2));		
+	}
+
+	public Pair getPair()
+	{
+		return (Pair)getValue();
+	}
 	
 	public SmplType car() throws TypeException
 	{

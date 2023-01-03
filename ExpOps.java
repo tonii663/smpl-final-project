@@ -1,8 +1,8 @@
 public class ExpOps extends Exp
 {
 	private String operation;
-	
-	public ExpOps(Exp exp, String op)
+
+	public ExpOps(String op, Exp... exp)
 	{
 		super("type-op", exp);
 		this.operation = op;

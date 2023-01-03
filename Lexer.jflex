@@ -122,6 +122,7 @@ ID = {CHAR}+
 
 <YYINITIAL> ";"		{return new Symbol(sym.SEMI);}
 <YYINITIAL> "@"		{return new Symbol(sym.AT);}
+<YYINITIAL> ","		{return new Symbol(sym.COMMA);}
 
 <YYINITIAL> "pair?"     {return new Symbol(sym.IS_PAIR);}
 <YYINITIAL> "pair"      {return new Symbol(sym.PAIR);}
@@ -141,11 +142,10 @@ ID = {CHAR}+
 
 <YYINITIAL> #c{CHAR}    {return new Symbol(sym.CHAR, ParseChar(yytext()));}
 
-<YYINITIAL> #t  {return new Symbol(sym.TRUE, true);}
-<YYINITIAL> #f  {return new Symbol(sym.FALSE, false);}
+<YYINITIAL> "#t"  {return new Symbol(sym.TRUE);}
+<YYINITIAL> "#f"  {return new Symbol(sym.FALSE);}
 
 <YYINITIAL> [-]?{DIGIT}+ {return new Symbol(sym.INT, ParseInteger(yytext()));}
-
 <YYINITIAL> #x{HEX}+    {return new Symbol(sym.INT, ParseHexToInteger(yytext()));}
 <YYINITIAL> #b{BINARY}+     {return new Symbol(sym.INT, ParseBinaryToInteger(yytext()));}
 

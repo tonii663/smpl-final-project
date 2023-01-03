@@ -21,7 +21,7 @@ public class Main
 			filenames.add(arg);
 		}
 
-		Walker<Environment<Object>, Object> walker = new SmplInterpreter();
+		Walker<Environment<SmplType>, SmplType> walker = new SmplInterpreter();
 
 		// NOTE(afb) :: Java retardation
 		// Class<? extends Walker<S, T>> wclass =
@@ -110,7 +110,13 @@ public class Main
 	public static <S, T> void parseWalkShow(Reader reader, Walker<S, T> walker)
 	{
 		T result = walker.run(reader);
-		System.out.println("Result: " + result.toString());
+
+		if(result instanceof SmplType)
+		{
+			SmplType r = (SmplType)result;
+			System.out.println("Result: " + r.getValue().toString());
+		}
+		
     }
 
 }

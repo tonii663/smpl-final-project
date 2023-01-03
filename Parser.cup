@@ -51,22 +51,26 @@ terminal BIT_AND, BIT_OR, BIT_NOT;
 terminal SEMI, AT;
 
 // Comparators
-terminal GT, LT, GE, LE, NE, ASSIGN;
+terminal GT, LT, GE, LE, NE, ASSIGN, COMMA;
 
 // Types
 terminal String VAR;
 terminal Integer INT;
 terminal Double DOUBLE;
-terminal Boolean TRUE;
-terminal Boolean FALSE;
 terminal Character CHAR;
 
-non terminal Exp expression, term, factor;
+terminal TRUE;
+terminal FALSE;
+
+non terminal ExpLit bool;
+
+non terminal Exp expression, boolExp, term, factor;
 non terminal Statement stmt;
 non terminal StatementSequence stmtList;
 non terminal StatementDefinition definition;
 non terminal SmplProgram program;
 
+non terminal ArrayList<Exp> expressionSequence;
 
 program ::= stmtList:seq {: RESULT = new SmplProgram(seq); :};
 
@@ -80,17 +84,32 @@ definition ::= VAR:var ASSIGN expression:e SEMI {: RESULT = new StatementDefinit
 
 expression ::= expression:e PLUS  term:t {: RESULT = new ExpAdd(e, t); :} |
 		   	   expression:e MINUS term:t {: RESULT = new ExpSub(e, t); :} |
-			   term:t {: RESULT = t; :};
+			   boolExp:b {: RESULT = b; :};
+
+expressionSequence ::= expressionSequence:seq COMMA expression:e  {: seq.add(e); RESULT = seq; :} |
+				   	   expression:e {:
+					   		ArrayList<Exp> result = new ArrayList<>();
+							result.add(e);
+							RESULT = result;
+						:};
+
+bool ::= TRUE {: RESULT = new ExpLit(true, "smpl-boolean"); :} |
+	 	 FALSE {: RESULT = new ExpLit(false, "smpl-boolean"); :};
+
+boolExp ::= boolExp:b AND term:t {: RESULT = new ExpAnd(b, t); :} |
+			boolExp:b OR term:t {: RESULT = new ExpOr(b, t); :} |			
+			term:t {: RESULT = t; :};
 
 term ::= term:t MUL factor:f {: RESULT = new ExpMul(t, f); :} |
 	 	 term:t DIV factor:f {: RESULT = new ExpDiv(t, f); :} |
 		 term:t MOD factor:f {: RESULT = new ExpMod(t, f); :} |
 		 factor:f {: RESULT = f; :};
 
-factor ::= INT:v {: RESULT = new ExpLit(v, "INT"); :} |
-	   	   DOUBLE:v {: RESULT = new ExpLit(v, "DOUBLE"); :} |
+factor ::= INT:v {: RESULT = new ExpLit(v, "smpl-integer"); :} |
+	   	   DOUBLE:v {: RESULT = new ExpLit(v, "smpl-double"); :} |
+		   bool:b {: RESULT = b; :} |		   
 		   VAR:var {: RESULT = new ExpVar(var); :} |		   
 		   LPAREN expression:e RPAREN {: RESULT = e; :} |
-		   LPAREN MINUS expression:e RPAREN {: RESULT = new ExpSub(new ExpLit(0.0, "DOUBLE"), e); :};
+		   LPAREN MINUS expression:e RPAREN {: :};
 
 empty ::= ;

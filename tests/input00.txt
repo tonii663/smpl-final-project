@@ -1,1 +1,6 @@
-(#t) or #f;
+def f proc(a, b, c)
+{
+	a + b + c;
+}
+
+f(1, 2, 3) + 1;

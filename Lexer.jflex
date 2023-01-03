@@ -117,6 +117,7 @@ ID = {CHAR}+
 <YYINITIAL> "]"		{return new Symbol(sym.RBRACKET);}
 <YYINITIAL> "{"		{return new Symbol(sym.LBRACE);}
 <YYINITIAL> "}"		{return new Symbol(sym.RBRACE);}
+
 <YYINITIAL> "[:"	{return new Symbol(sym.LB_COLON);}
 <YYINITIAL> ":]"	{return new Symbol(sym.RB_COLON);}
 

@@ -17,6 +17,13 @@ public class Evaluator implements Visitor<Environment<SmplType>, SmplType>
 		return stmt.getExp().visit(this, state);
 	}
 
+	public SmplType visitStmtFuncDefinition(StmtFuncDefinition fd, Environment<SmplType> state)
+	{
+		Closure closure = new Closure(fd, state);
+		state.putClosure(fd.getName(), closure);
+		return new SmplNil();
+	}
+
 	public SmplType visitStatementDefinition(StatementDefinition def, Environment<SmplType> state)
 	{
 		SmplType result;
@@ -40,6 +47,34 @@ public class Evaluator implements Visitor<Environment<SmplType>, SmplType>
 		
 		return result;
 	}
+
+	public SmplType visitExpFuncCall(ExpFuncCall exp, Environment<SmplType> state)
+	{
+		SmplType result;
+		
+		ArrayList<Exp> args = exp.getSubTrees();
+		Closure closure = state.getClosure(exp.getName());
+		StmtFuncDefinition fun = closure.getFunction();
+		
+		if(fun.getParamsCount() != args.size())
+		{
+			throw new UnboundVarException(fun.getName());
+		}
+
+		ArrayList<String> params = fun.getParams();
+		ArrayList<SmplType> arguments = new ArrayList<SmplType>();
+
+		for(int i = 0; i < fun.getParamsCount(); i++)
+		{
+			arguments.add(args.get(i).visit(this, state));
+		}
+		
+		Environment<SmplType> child = new Environment<SmplType>(closure.getClosingEnv(),
+																params, arguments);
+		result = fun.getBody().visit(this, child);
+
+		return result;
+	}	
 
 	public SmplType visitExpAdd(ExpAdd exp, Environment<SmplType> state)
 	{

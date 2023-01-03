@@ -22,6 +22,11 @@ public abstract class SmplType<T>
 		return value;
 	}
 
+	public SmplType size() throws TypeException
+	{
+		throw new TypeException();
+	}
+
 	public SmplType add(SmplType v) throws TypeException
 	{
 		throw new TypeException();
@@ -87,5 +92,20 @@ public abstract class SmplType<T>
 	{
 		throw new TypeException();
 	}
-	
+
+	public SmplType car() throws TypeException
+	{
+		throw new TypeException();
+	}
+
+	public SmplType cdr() throws TypeException
+	{
+		throw new TypeException();
+	}
+
+	public SmplType isPair()
+	{
+		return new  SmplBoolean(false);
+	}
+
 }

@@ -152,6 +152,38 @@ public class Evaluator implements Visitor<Environment<SmplType>, SmplType>
 		return state.get(exp.getVar());
 	}	
 
+
+	public SmplType visitExpOps(ExpOps exp, Environment<SmplType> state)
+	{				
+		switch(exp.getOp())
+		{
+			case("size"):
+			{
+				return exp.getSubTree(0).visit(this, state).size();
+			}
+
+			case("car"):
+			{
+				return exp.getSubTree(0).visit(this, state).car();
+			}
+
+			case("cdr"):
+			{
+				return exp.getSubTree(0).visit(this, state).cdr();
+			}
+
+			case("is-pair"):
+			{
+				return exp.getSubTree(0).visit(this, state).isPair();
+			}
+
+			default:
+			{
+				// TODO(afb) :: Error handling
+				return null;
+			}
+		}
+	}
 	
 	public SmplType visitExpLit(ExpLit exp, Environment<SmplType> state)
 	{
@@ -170,6 +202,32 @@ public class Evaluator implements Visitor<Environment<SmplType>, SmplType>
 			case("smpl-boolean"):
 			{
 				return new SmplBoolean((Boolean)exp.getValue());
+			}
+
+			case("smpl-character"):
+			{
+				return new SmplCharacter((Character)exp.getValue());
+			}
+
+			case("smpl-pair"):
+			{				
+				ArrayList<Exp> r = (ArrayList<Exp>)(exp.getValue());
+				Pair p = new Pair(r.get(0).visit(this, state),
+								  r.get(1).visit(this, state));
+				return new SmplPair(p);
+			}
+			
+			case("smpl-vector"):
+			{				
+				ArrayList<Exp> r = (ArrayList<Exp>)(exp.getValue());
+				ArrayList<SmplType> result = new ArrayList<SmplType>();
+
+				for(Exp a : r)
+				{
+					result.add(a.visit(this, state));
+				}
+
+				return new SmplVector(new Vector(result));
 			}
 
 			default:

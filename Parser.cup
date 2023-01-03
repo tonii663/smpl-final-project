@@ -80,6 +80,12 @@ non terminal ExpFuncCall funcCall;
 non terminal ArrayList<Exp> argList;
 non terminal ArrayList<Exp> argListE;
 
+non terminal Exp pair;
+non terminal Exp vector;
+non terminal ArrayList<Exp> vectorBody;
+
+non terminal ExpOps ops;
+
 non terminal empty;
 
 program ::= stmtList:seq {: RESULT = new SmplProgram(seq); :};
@@ -138,9 +144,28 @@ term ::= term:t MUL factor:f {: RESULT = new ExpMul(t, f); :} |
 factor ::= funcCall:f {: RESULT = f; :} |
 	   	   INT:v {: RESULT = new ExpLit(v, "smpl-integer"); :} |
 	   	   DOUBLE:v {: RESULT = new ExpLit(v, "smpl-double"); :} |
+		   CHAR:c {: RESULT = new ExpLit(c, "smpl-character"); :} |
 		   bool:b {: RESULT = b; :} |
+		   pair:p {: RESULT = p; :} |
+		   vector:v {: RESULT = v; :} |
+		   ops:o {: RESULT = o; :} |
 		   VAR:var {: RESULT = new ExpVar(var); :} |
 		   LPAREN expression:e RPAREN {: RESULT = e; :} |		   
 		   LPAREN MINUS expression:e RPAREN {: :};
 
+ops ::= SIZE LPAREN expression:e RPAREN {: RESULT = new ExpOps(e, "size"); :} |
+		CAR LPAREN expression:e RPAREN {: RESULT = new ExpOps(e, "car"); :} |
+		CDR LPAREN expression:e RPAREN {: RESULT = new ExpOps(e, "cdr"); :} |
+		IS_PAIR LPAREN expression:e RPAREN {: RESULT = new ExpOps(e, "is-pair"); :};
+
+vector ::= LB_COLON argListE:aList RB_COLON
+	   	   {: RESULT = new ExpLit(aList, "smpl-vector"); :};
+
+pair ::= PAIR LPAREN expression:e1 COMMA expression:e2 RPAREN
+	 	 {:
+			ArrayList<Exp> r = new ArrayList<Exp>();
+			r.add(e1);
+			r.add(e2);
+			RESULT = new ExpLit(r, "smpl-pair");
+		:};
 empty ::= ;

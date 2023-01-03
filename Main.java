@@ -114,7 +114,7 @@ public class Main
 		if(result instanceof SmplType)
 		{
 			SmplType r = (SmplType)result;
-			System.out.println("Result: " + r.getValue().toString());
+			System.out.println("Result: " + r.toString());
 		}
 		
     }

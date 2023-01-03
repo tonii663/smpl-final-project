@@ -1,6 +1,5 @@
 public abstract class ExpUnaryOperator extends Exp
 {
-
     protected ExpUnaryOperator(String name, Exp exp)
 	{
 		super(name, exp);

@@ -84,7 +84,7 @@ public class SmplInteger extends SmplType<Integer>
 		throw new TypeException();
 	}
 
-	public SmplType isEqu(SmplType v)
+	public SmplType isEqv(SmplType v)
 	{
 		if(v instanceof SmplInteger)
 		{			
@@ -97,6 +97,12 @@ public class SmplInteger extends SmplType<Integer>
 		}
 		
 		return new SmplBoolean(false);
+	}
+
+	
+	public SmplType isEqu(SmplType v)
+	{
+		return areEqual(v);
 	}
 
 	
@@ -219,8 +225,8 @@ public class SmplInteger extends SmplType<Integer>
 
 		if(v instanceof SmplDouble)
 		{			
-			Double r1 =  Double.valueOf((Integer)getValue());
-			Double r2 = (Double)v.getValue();
+			double r1 =  Double.valueOf((Integer)getValue());
+			double r2 = (Double)v.getValue();
 			return new SmplBoolean(r1 == r2);
 		}
 

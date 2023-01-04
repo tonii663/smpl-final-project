@@ -245,7 +245,12 @@ public class Evaluator implements Visitor<Environment<SmplType>, SmplType>
 			{
 				return exp.getSubTree(0).visit(this, state).index(exp.getSubTree(0).visit(this, state));
 			}
-			
+
+			case("eqv"):
+			{
+				return exp.getSubTree(0).visit(this, state).isEqv(exp.getSubTree(1).visit(this, state));
+			}
+
 			case("equ"):
 			{
 				return exp.getSubTree(0).visit(this, state).isEqu(exp.getSubTree(1).visit(this, state));

@@ -7,19 +7,23 @@ public class SmplDouble extends SmplType<Double>
 	
 	public SmplType isEqu(SmplType v)
 	{
+		return areEqual(v);
+	}
+
+	public SmplType isEqv(SmplType v)
+	{
 		if(v instanceof SmplDouble)
 		{			
 			SmplDouble i = (SmplDouble)v;
 
-			Double r1 = (Double)i.getValue();
-			Double r2 = (Double)getValue();
+			double r1 = (Double)i.getValue();
+			double r2 = (Double)getValue();
 			
 			return new SmplBoolean(r1 == r2);
 		}
 		
 		return new SmplBoolean(false);
 	}
-
 	
 	public SmplType add(SmplType v)
 	{
@@ -189,15 +193,15 @@ public class SmplDouble extends SmplType<Double>
 	{
 		if(v instanceof SmplDouble)
 		{			
-			Double r1 = (Double)getValue();
-			Double r2 = (Double)v.getValue();
+			double r1 = (Double)getValue();
+			double r2 = (Double)v.getValue();
 			return new SmplBoolean(r1 == r2);
 		}
 
 		if(v instanceof SmplInteger)
 		{
-			Double r1 = (Double)getValue();
-			Double r2 = Double.valueOf((Integer)v.getValue());
+			double r1 = (Double)getValue();
+			double r2 = Double.valueOf((Integer)v.getValue());
 			return new SmplBoolean(r1 == r2);
 		}
 		

@@ -6,8 +6,7 @@ public class ExpLit extends Exp
 	
 	public ExpLit(Object value, String type)
 	{
-		super("lit");
-
+		super("lit");		
 		this.smplType = type;
 		this.value = value;
 	}

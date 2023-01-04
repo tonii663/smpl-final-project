@@ -41,7 +41,7 @@ scan with {:
 
 
 
-terminal LPAREN, RPAREN, LBRACE, RBRACE, LBRACKET, RBRACKET, LB_COLON, RB_COLON;
+terminal COLON, LPAREN, RPAREN, LBRACE, RBRACE, LBRACKET, RBRACKET, LB_COLON, RB_COLON;
 terminal IS_PAIR, PAIR, CAR, CDR, LIST, SIZE, EQV, EQL, SUBSTR, DEF, PROC, NIL;
 terminal PRINT, PRINTLN;
 
@@ -77,6 +77,7 @@ non terminal StmtFuncDefinition funcDefn;
 non terminal ArrayList<String> paramList;
 non terminal ArrayList<String> paramListE;
 
+
 // Function Call
 non terminal ExpFuncCall funcCall;
 non terminal ArrayList<Exp> argList;
@@ -86,8 +87,12 @@ non terminal Exp;
 
 non terminal Exp list;
 non terminal Exp pair;
+
+// Vector
 non terminal Exp vector;
-non terminal ArrayList<Exp> vectorBody;
+non terminal ExpVectorParam subVector;
+non terminal ArrayList<Exp> subVectorList;
+non terminal ArrayList<Exp> subVectorListE;
 
 non terminal ExpOps ops;
 
@@ -191,9 +196,24 @@ list ::= LBRACKET argListE:aList RBRACKET
 		 {: RESULT = new ExpLit(aList, "smpl-list"); :};
 
 
-vector ::= LB_COLON argListE:aList RB_COLON
-	   	   {: RESULT = new ExpLit(aList, "smpl-vector"); :};
+vector ::= LB_COLON subVectorListE:v RB_COLON
+	   	   {: RESULT = new ExpLit(v, "smpl-vector"); :};
 
+subVectorListE ::= subVectorList:v {: RESULT = v; :};
+
+subVectorList ::= subVectorList:seq COMMA subVector:e
+			  	  {: seq.add(e); RESULT = seq; :} |
+				  subVector:e
+				  {:
+				  	 ArrayList<Exp> r = new ArrayList<>();
+					 r.add(e);
+					 RESULT = r;
+				  :};
+
+subVector ::= expression:e {: RESULT = new ExpVectorParam(e); :} |
+		  	  expression:n COLON PROC LPAREN VAR:v RPAREN expression:eval
+			  {: RESULT = new ExpVectorParam(n, v, eval); :};
+	
 
 pair ::= PAIR LPAREN expression:e1 COMMA expression:e2 RPAREN
 	 	 {:

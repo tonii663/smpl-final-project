@@ -14,6 +14,13 @@ public class Environment<T>
 		functionDictionary = new HashMap<String, Closure>();
 	}
 
+	public Environment(Environment<T> parent)
+	{
+		this.parent = parent;
+		dictionary = new HashMap<>();
+		functionDictionary = new HashMap<String, Closure>();
+	}
+
     public static <T> Environment<T> makeGlobalEnv(Class<T> cls)
 	{
 		Environment<T> result =  new Environment<T>();		
@@ -78,6 +85,18 @@ public class Environment<T>
 	public void putClosure(String id, Closure value)
 	{
 		functionDictionary.put(id, value);
+    }
+
+	public String toString()
+	{
+		StringBuffer result = new StringBuffer();
+
+		Iterator iter = dictionary.keySet().iterator();
+		while (iter.hasNext())
+		{
+			result = result.append(iter.next().toString());
+		}
+		return result.toString();
     }
 
 }

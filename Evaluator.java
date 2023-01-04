@@ -9,7 +9,8 @@ public class Evaluator implements Visitor<Environment<SmplType>, SmplType>
 	
 	public SmplType visitSmplProgram(SmplProgram program, Environment<SmplType> state)
 	{
-		return program.getSeq().visit(this, state);
+		SmplType result = program.getSeq().visit(this, state);
+		return result;
 	}
 	
 	public SmplType visitStatement(Statement stmt, Environment<SmplType> state)
@@ -257,6 +258,45 @@ public class Evaluator implements Visitor<Environment<SmplType>, SmplType>
 			}
 		}
 	}
+
+	
+	public SmplType visitExpVectorParamList(ExpVectorParamList exp,
+											Environment<SmplType> state)
+	{
+		return new SmplRaw(exp.getValues());
+	}
+	
+	public SmplType visitExpVectorParam(ExpVectorParam exp, Environment<SmplType> state)
+	{
+		ArrayList<SmplType> result = new ArrayList<>();
+
+		String type = exp.getType();
+		if(type == "value")
+		{
+			SmplType r = exp.getSubTree(0).visit(this, state);
+			result.add(r);
+		}
+		else if(type == "func")
+		{
+			SmplType counter = exp.getSubTree(0).visit(this, state);
+			if(counter instanceof SmplInteger)
+			{
+				Integer siz = (Integer)counter.getValue();
+				Exp eval = exp.getSubTree(1);				
+				String iter = exp.getIter();
+				Environment<SmplType> child = new Environment<SmplType>(state);
+				
+				for(int i = 0; i < siz; i++)
+				{
+					child.put(iter, new SmplInteger(i));
+					SmplType r = eval.visit(this, child);
+					result.add(r);
+				}
+			}
+		}
+		
+		return new SmplRaw(result);
+	}
 	
 	public SmplType visitExpLit(ExpLit exp, Environment<SmplType> state)
 	{
@@ -291,13 +331,20 @@ public class Evaluator implements Visitor<Environment<SmplType>, SmplType>
 			}
 			
 			case("smpl-vector"):
-			{				
-				ArrayList<Exp> r = (ArrayList<Exp>)(exp.getValue());
-				ArrayList<SmplType> result = new ArrayList<SmplType>();
-
-				for(Exp a : r)
+			{
+				ArrayList<Exp> t1 = (ArrayList<Exp>)exp.getValue();
+								
+				ArrayList<SmplType> result = new ArrayList<>();
+				
+				for(Exp t2 : t1)
 				{
-					result.add(a.visit(this, state));
+					SmplType t3 = t2.visit(this, state);
+					ArrayList<SmplType> t4 = (ArrayList<SmplType>)t3.getValue();
+
+					for(SmplType t : t4)
+					{
+						result.add(t);
+					}
 				}
 
 				return new SmplVector(new Vector(result));
@@ -321,6 +368,6 @@ public class Evaluator implements Visitor<Environment<SmplType>, SmplType>
 				// TODO(afb) :: Error handling
 				return null;
 			}
-		}
-	}	   
+		}		
+	}  
 }

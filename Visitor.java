@@ -33,6 +33,8 @@ public interface Visitor<S, T>
 	public T visitExpPrint(ExpPrint exp, S state);
 	public T visitExpPrintln(ExpPrintln exp, S state);
 
+	public T visitExpVectorParam(ExpVectorParam exp, S state);
+	public T visitExpVectorParamList(ExpVectorParamList exp, S state);
 	
 	// public T visitExpPair(ExpPair exp, S state);
 	// public T visitExpList(ExpList exp, S state);

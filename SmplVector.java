@@ -6,7 +6,6 @@ public class SmplVector extends SmplType<Vector>
 	{
 		super(value);
 	}
-
 	
 	public SmplType index(SmplType v)
 	{

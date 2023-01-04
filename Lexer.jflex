@@ -64,12 +64,19 @@ import java_cup.runtime.*;
         return Integer.parseInt(s, 2);
     }
 
-    public int ParseHexToInteger(String s)
+    public Integer ParseHexToInteger(String s)
     {
-        s = s.substring(2);
-        return Integer.parseInt(s, 16);
+		String num = s.replaceFirst("#x", "");
+		num = num.replaceAll(" ", "");
+		return Integer.parseInt(num, 16);
     }
 
+	public Character ParseUnicodeToChar(String s)
+	{
+		int c = Integer.parseInt(s.substring(2), 16);
+		return Character.valueOf(Character.toChars(c)[0]);
+	}
+	
     // TODO(afb) :: Consider making it a Character
     public Character ParseChar(String s)
     {
@@ -121,6 +128,7 @@ ID			= {CHAR}+
 <YYINITIAL> "[:"	{return new Symbol(sym.LB_COLON);}
 <YYINITIAL> ":]"	{return new Symbol(sym.RB_COLON);}
 
+<YYINITIAL> ":"		{return new Symbol(sym.COLON);}
 <YYINITIAL> ";"		{return new Symbol(sym.SEMI);}
 <YYINITIAL> "@"		{return new Symbol(sym.AT);}
 <YYINITIAL> ","		{return new Symbol(sym.COMMA);}
@@ -147,11 +155,12 @@ ID			= {CHAR}+
 <YYINITIAL> "#f"  {return new Symbol(sym.FALSE);}
 <YYINITIAL> "#e"  {return new Symbol(sym.NIL);}
 
-<YYINITIAL> #c{CHAR}    {return new Symbol(sym.CHAR, ParseChar(yytext()));}
+<YYINITIAL> #c{CHAR} {return new Symbol(sym.CHAR, ParseChar(yytext()));}
+<YYINITIAL> #u{HEX}{4}  {return new Symbol(sym.CHAR, ParseUnicodeToChar(yytext()));}
 
 <YYINITIAL> {DOUBLE}	    {return new Symbol(sym.DOUBLE, ParseDouble(yytext()));}
 <YYINITIAL> [-]?{DIGIT}+	{return new Symbol(sym.INT, ParseInteger(yytext()));}
-<YYINITIAL> #x{HEX}+		{return new Symbol(sym.INT, ParseHexToInteger(yytext()));}
+<YYINITIAL> [-]?#x{HEX}+    {return new Symbol(sym.INT, ParseHexToInteger(yytext()));}
 <YYINITIAL> #b{BINARY}+     {return new Symbol(sym.INT, ParseBinaryToInteger(yytext()));}
 
 <YYINITIAL> {ID}  {return new Symbol(sym.VAR, yytext());}

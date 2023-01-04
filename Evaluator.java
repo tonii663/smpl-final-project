@@ -77,6 +77,32 @@ public class Evaluator implements Visitor<Environment<SmplType>, SmplType>
 		return result;
 	}	
 
+	public SmplType visitExpBitAnd(ExpBitAnd exp, Environment<SmplType> state)
+	{
+		SmplType val1, val2;
+		val1 = exp.getLeftExp().visit(this, state);
+		val2 = exp.getRightExp().visit(this, state);
+		
+		return val1.bitwiseAnd(val2);
+	}	
+	
+	public SmplType visitExpBitOr(ExpBitOr exp, Environment<SmplType> state)
+	{
+		SmplType val1, val2;
+		val1 = exp.getLeftExp().visit(this, state);
+		val2 = exp.getRightExp().visit(this, state);
+		
+		return val1.bitwiseOr(val2);
+	}	
+	
+	public SmplType visitExpBitNot(ExpBitNot exp, Environment<SmplType> state)
+	{
+		SmplType val;
+		val = exp.getExp().visit(this, state);		
+		return val.bitwiseNot();
+	}	
+
+	
 	public SmplType visitExpAdd(ExpAdd exp, Environment<SmplType> state)
 	{
 		SmplType val1, val2;
@@ -255,6 +281,13 @@ public class Evaluator implements Visitor<Environment<SmplType>, SmplType>
 			{
 				return exp.getSubTree(0).visit(this, state).isEqu(exp.getSubTree(1).visit(this, state));
 			}
+			
+			case("substr"):
+			{
+				return exp.getSubTree(0).visit(this, state)
+				.substr(exp.getSubTree(1).visit(this, state),
+						exp.getSubTree(2).visit(this, state));
+			}
 
 			default:
 			{
@@ -326,6 +359,11 @@ public class Evaluator implements Visitor<Environment<SmplType>, SmplType>
 			{
 				return new SmplCharacter((Character)exp.getValue());
 			}
+			
+			case("smpl-string"):
+			{
+				return new SmplString((String)exp.getValue());
+			}
 
 			case("smpl-pair"):
 			{				
@@ -334,7 +372,7 @@ public class Evaluator implements Visitor<Environment<SmplType>, SmplType>
 								  r.get(1).visit(this, state));
 				return new SmplPair(p);
 			}
-			
+
 			case("smpl-vector"):
 			{
 				ArrayList<Exp> t1 = (ArrayList<Exp>)exp.getValue();

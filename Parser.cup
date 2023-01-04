@@ -52,10 +52,12 @@ terminal BIT_AND, BIT_OR, BIT_NOT;
 terminal SEMI, AT;
 
 // Comparators
-terminal GT, LT, GE, LE, NE;
+terminal String COND; // GT, LT, GE, LE, NE;
 terminal ASSIGN, EQUAL, COMMA;
 
+terminal IF, THEN, ELSE;
 // Types
+terminal String STRING;
 terminal String VAR;
 terminal Integer INT;
 terminal Double DOUBLE;
@@ -66,10 +68,11 @@ terminal FALSE;
 
 non terminal ExpLit bool;
 
-non terminal Exp expression, boolExp, cmp, term, factor;
+non terminal Exp expression, addSub, boolExp, cmp, bitwise, bitNot, term, factor;
 non terminal Statement stmt;
 non terminal StatementSequence stmtList;
 non terminal StatementDefinition definition;
+
 non terminal SmplProgram program;
 
 // Function Def
@@ -98,6 +101,9 @@ non terminal ExpOps ops;
 
 non terminal Exp print, println;
 
+non terminal StmtIf, stmtIf, stmtElse;
+non terminal Exp cmpExp; 
+
 non terminal empty;
 
 program ::= stmtList:seq {: RESULT = new SmplProgram(seq); :};
@@ -109,6 +115,7 @@ stmt ::= expression:e SEMI {: RESULT = new Statement(e); :} |
 	 	 definition:d {: RESULT = d; :} |
 		 funcDefn:f {: RESULT = f; :};
 
+cmpExp ::= expression:e1 COND:c expression:e2 {: :};
 
 funcDefn ::= DEF VAR:var PROC LPAREN paramListE:pList RPAREN LBRACE stmtList:seq RBRACE
 		 	 {: RESULT = new StmtFuncDefinition(var, pList, seq); :};
@@ -123,11 +130,8 @@ paramList ::= paramList:seq COMMA VAR:v  {: seq.add(v); RESULT = seq; :} |
 					RESULT = result;
 			:};
 
-definition ::= VAR:var ASSIGN expression:e SEMI {: RESULT = new StatementDefinition(var, e); :};
-
-expression ::= expression:e PLUS  term:t {: RESULT = new ExpAdd(e, t); :} |
-		   	   expression:e MINUS term:t {: RESULT = new ExpSub(e, t); :} |			   
-			   boolExp:b {: RESULT = b; :};
+definition ::= DEF VAR:var expression:e SEMI {: RESULT = new StatementDefinition(var, e); :} |
+		   	   VAR:var ASSIGN expression:e SEMI {: RESULT = new StatementDefinition(var, e); :};
 
 // expression:e LBRACKET expression:i RBRACKET {: RESULT = new ExpOps("index", e, i); :} |
 
@@ -141,38 +145,49 @@ argList ::= argList:seq COMMA expression:e  {: seq.add(e); RESULT = seq; :} |
 			:};
 			
 argListE ::= argList:aList {: RESULT = aList; :} |
-		 	 empty {: RESULT = new ArrayList<Exp>(); :};
+		 	 empty {: RESULT = new ArrayList<Exp>(); :};		   
 
 bool ::= TRUE {: RESULT = new ExpLit(true, "smpl-boolean"); :} |
 	 	 FALSE {: RESULT = new ExpLit(false, "smpl-boolean"); :};
 
-boolExp ::= boolExp:b AND term:t {: RESULT = new ExpAnd(b, t); :} |
-			boolExp:b OR term:t {: RESULT = new ExpOr(b, t); :} |			
+
+expression ::= boolExp:b {: RESULT = b; :};
+
+boolExp ::= boolExp:b AND cmp:c {: RESULT = new ExpAnd(b, c); :} |
+			boolExp:b OR cmp:c  {: RESULT = new ExpOr(b, c); :} |
+			NOT cmp:c {: RESULT = new ExpNot(c); :} |
 			cmp:c {: RESULT = c; :};
 
-cmp ::= cmp:c GT term:t {: RESULT = new ExpCmp("GT", c, t); :} |
-		cmp:c LT term:t {: RESULT = new ExpCmp("LT", c, t); :} |
-		cmp:c GE term:t {: RESULT = new ExpCmp("GE", c, t); :} |
-		cmp:c LE term:t {: RESULT = new ExpCmp("LE", c, t); :} |
-		cmp:c NE term:t {: RESULT = new ExpCmp("NE", c, t); :} |
-		cmp:c EQUAL term:t {: RESULT = new ExpCmp("EQUAL", c, t); :} |
-		term:t {: RESULT = t; :};
+cmp ::= cmp:c COND:cond bitwise:b {: RESULT = new ExpCmp(cond, c, b); :} |
+		bitwise:b {: RESULT = b; :};
 
-term ::= term:t MUL factor:f {: RESULT = new ExpMul(t, f); :} |
-	 	 term:t DIV factor:f {: RESULT = new ExpDiv(t, f); :} |
-		 term:t MOD factor:f {: RESULT = new ExpMod(t, f); :} |
-		 factor:f {: RESULT = f; :};
+bitwise ::= bitwise:b BIT_AND addSub:t {: RESULT = new ExpBitAnd(b, t);:} |
+			bitwise:b BIT_OR  addSub:t {: RESULT = new ExpBitOr(b, t); :} |			
+			addSub:t {: RESULT = t; :};
+
+addSub ::= addSub:a PLUS  term:b {: RESULT = new ExpAdd(a, b); :} |			   
+		   addSub:a MINUS term:b {: RESULT = new ExpSub(a, b); :} |
+		   term:t {: RESULT = t; :};
+		   
+term ::= term:t MUL bitNot:b {: RESULT = new ExpMul(t, b); :} |
+	 	 term:t DIV bitNot:b {: RESULT = new ExpDiv(t, b); :} |
+		 term:t MOD bitNot:b {: RESULT = new ExpMod(t, b); :} |
+		 bitNot:b {: RESULT = b; :};
+
+bitNot ::= BIT_NOT factor:f {: RESULT = new ExpBitNot(f); :} |
+	   	   factor:f {: RESULT = f; :};
 
 factor ::= funcCall:f {: RESULT = f; :} |
 	   	   INT:v {: RESULT = new ExpLit(v, "smpl-integer"); :} |
 	   	   DOUBLE:v {: RESULT = new ExpLit(v, "smpl-double"); :} |
 		   CHAR:c {: RESULT = new ExpLit(c, "smpl-character"); :} |
+		   STRING:s {: RESULT = new ExpLit(s, "smpl-string"); :} |
 		   bool:b {: RESULT = b; :} |
 		   pair:p {: RESULT = p; :} |
 		   vector:v {: RESULT = v; :} |
 		   list:l {: RESULT = l; :} |
 		   ops:o {: RESULT = o; :} |
-		   print:p {: RESULT = p; :} |
+		   print:p {: RESULT = p; :} |		   
 		   VAR:var {: RESULT = new ExpVar(var); :} |
 		   LPAREN expression:e RPAREN {: RESULT = e; :} |		   
 		   LPAREN MINUS expression:e RPAREN {: :};
@@ -187,7 +202,9 @@ ops ::= SIZE LPAREN expression:e RPAREN {: RESULT = new ExpOps("size", e); :} |
 		CDR LPAREN expression:e RPAREN {: RESULT = new ExpOps("cdr", e); :} |
 		EQV LPAREN expression:e1 COMMA expression:e2 RPAREN {: RESULT = new ExpOps("eqv", e1, e2); :} |
 		EQL LPAREN expression:e1 COMMA expression:e2 RPAREN {: RESULT = new ExpOps("equ", e1, e2); :} |
-		IS_PAIR LPAREN expression:e RPAREN {: RESULT = new ExpOps("is-pair", e); :};
+		IS_PAIR LPAREN expression:e RPAREN {: RESULT = new ExpOps("is-pair", e); :} |
+		SUBSTR LPAREN expression:s COMMA expression:start COMMA expression:end RPAREN
+		{: RESULT = new ExpOps("substr", s, start, end); :};
 
 
 list ::= LBRACKET argListE:aList RBRACKET
@@ -199,7 +216,8 @@ list ::= LBRACKET argListE:aList RBRACKET
 vector ::= LB_COLON subVectorListE:v RB_COLON
 	   	   {: RESULT = new ExpLit(v, "smpl-vector"); :};
 
-subVectorListE ::= subVectorList:v {: RESULT = v; :};
+subVectorListE ::= subVectorList:v {: RESULT = v; :} |
+			   	   empty {: RESULT = new ArrayList<Exp>(); :};
 
 subVectorList ::= subVectorList:seq COMMA subVector:e
 			  	  {: seq.add(e); RESULT = seq; :} |

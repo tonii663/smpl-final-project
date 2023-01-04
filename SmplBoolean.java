@@ -26,7 +26,6 @@ public class SmplBoolean extends SmplType<Boolean>
 
 		throw new TypeException();
 	}
-
 	
 	public SmplType not()
 	{

@@ -193,7 +193,7 @@ public class SmplInteger extends SmplType<Integer>
 
 	public SmplType notEqual(SmplType v)
 	{
-				if(v instanceof SmplInteger)
+		if(v instanceof SmplInteger)
 		{			
 			SmplInteger i = (SmplInteger)v;
 			
@@ -231,6 +231,40 @@ public class SmplInteger extends SmplType<Integer>
 		}
 
 		throw new TypeException();
+	}
+
+	public SmplType bitwiseAnd(SmplType v)
+	{
+		if(v instanceof SmplInteger)
+		{			
+			SmplInteger i = (SmplInteger)v;
+			
+			Integer r1 = (Integer)getValue();
+			Integer r2 = (Integer)i.getValue();		   			
+			return new SmplInteger(r1 & r2);
+		}
+
+		throw new TypeException();
+	}
+
+	public SmplType bitwiseOr(SmplType v) throws TypeException
+	{
+		if(v instanceof SmplInteger)
+		{			
+			SmplInteger i = (SmplInteger)v;
+			
+			Integer r1 = (Integer)getValue();
+			Integer r2 = (Integer)i.getValue();		   			
+			return new SmplInteger(r1 | r2);
+		}
+
+		throw new TypeException();
+	}
+
+	public SmplType bitwiseNot() throws TypeException
+	{
+		Integer r = (Integer)getValue();
+		return new SmplInteger(~r);
 	}
 
 }

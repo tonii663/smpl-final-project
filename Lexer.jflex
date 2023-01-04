@@ -30,6 +30,10 @@ import java_cup.runtime.*;
 
 
 %{
+	StringBuffer strBuff = new StringBuffer();
+
+	int nestedBlockCommentCount = 0;
+	
     public long getChar() {
         return yychar + 1;
     }
@@ -84,6 +88,16 @@ import java_cup.runtime.*;
     }
 %}
 
+nl = [\n\r]
+ws = {cc}|[\t ]
+
+%xstates PARSE_STRING, ESCAPE_SEQUENCE
+%xstates BLK_COMMENT
+
+stringChar = [^\"\\\r\n\t]
+stringBreak = {nl}+({nl}|{ws})*|[\t]+ 
+blockCommentChar = [^"/*""*/"]
+
 NEWLINE		= [\n\r]
 cc			= ([\b\f]|{NEWLINE})
 WHITESPACE	= {cc}|[\t ]
@@ -91,12 +105,13 @@ WHITESPACE	= {cc}|[\t ]
 BINARY		= [10]
 HEX			= [0-9A-Fa-f]
 DIGIT		= [0-9]
-ALPHA		= [a-zA-Z_]
-ALPHANUM	= {alpha}|{NUM}
+SYMBOLS     = ["+""-""*"/%"^"&|~@"?"!]
+ALPHA		= [a-zA-Z]
+ALPHANUM	= {ALPHA}|{DIGIT}|[_]
 DOUBLE		= [-]?({DIGIT}+\.{DIGIT}*)|({DIGIT}*\.{DIGIT}+)
 CHAR		= [A-Za-z_]
-ID			= {CHAR}+
 
+VAR_COMP = {ALPHANUM}|{SYMBOLS}
 %%
 
 <YYINITIAL> {NEWLINE}    { yychar = 0; }
@@ -111,12 +126,13 @@ ID			= {CHAR}+
 <YYINITIAL> {WHITESPACE}"|"{WHITESPACE}		{return new Symbol(sym.BIT_OR);}
 <YYINITIAL> {WHITESPACE}"~"{WHITESPACE}		{return new Symbol(sym.BIT_NOT);}
 <YYINITIAL> {WHITESPACE}":="{WHITESPACE}	{return new Symbol(sym.ASSIGN);}                            
-<YYINITIAL> {WHITESPACE}">"{WHITESPACE}		{return new Symbol(sym.GT);}
-<YYINITIAL> {WHITESPACE}"<"{WHITESPACE}		{return new Symbol(sym.LT);}
-<YYINITIAL> {WHITESPACE}">="{WHITESPACE}	{return new Symbol(sym.GE);}
-<YYINITIAL> {WHITESPACE}"<="{WHITESPACE}	{return new Symbol(sym.LE);}
-<YYINITIAL> {WHITESPACE}"!="{WHITESPACE}	{return new Symbol(sym.NE);}
-<YYINITIAL> {WHITESPACE}"="{WHITESPACE}	    {return new Symbol(sym.EQUAL);}
+
+<YYINITIAL> {WHITESPACE}">"{WHITESPACE}		{return new Symbol(sym.COND, "GT");}
+<YYINITIAL> {WHITESPACE}"<"{WHITESPACE}		{return new Symbol(sym.COND, "LT");}
+<YYINITIAL> {WHITESPACE}">="{WHITESPACE}	{return new Symbol(sym.COND, "GE");}
+<YYINITIAL> {WHITESPACE}"<="{WHITESPACE}	{return new Symbol(sym.COND, "LE");}
+<YYINITIAL> {WHITESPACE}"!="{WHITESPACE}	{return new Symbol(sym.COND, "NE");}
+<YYINITIAL> {WHITESPACE}"="{WHITESPACE}	    {return new Symbol(sym.COND, "EQUAL");}
 
 <YYINITIAL> "("		{return new Symbol(sym.LPAREN);}
 <YYINITIAL> ")"		{return new Symbol(sym.RPAREN);}
@@ -151,6 +167,10 @@ ID			= {CHAR}+
 <YYINITIAL> "or"        {return new Symbol(sym.OR);}
 <YYINITIAL> "not"       {return new Symbol(sym.NOT);}
 
+<YYINITIAL> "if"       {return new Symbol(sym.IF);}
+<YYINITIAL> "then"     {return new Symbol(sym.THEN);}
+<YYINITIAL> "else"     {return new Symbol(sym.ELSE);}
+
 <YYINITIAL> "#t"  {return new Symbol(sym.TRUE);}
 <YYINITIAL> "#f"  {return new Symbol(sym.FALSE);}
 <YYINITIAL> "#e"  {return new Symbol(sym.NIL);}
@@ -163,6 +183,60 @@ ID			= {CHAR}+
 <YYINITIAL> [-]?#x{HEX}+    {return new Symbol(sym.INT, ParseHexToInteger(yytext()));}
 <YYINITIAL> #b{BINARY}+     {return new Symbol(sym.INT, ParseBinaryToInteger(yytext()));}
 
-<YYINITIAL> {ID}  {return new Symbol(sym.VAR, yytext());}
+<YYINITIAL>	"/*"	{nestedBlockCommentCount += 1;
+					yychar -= 2;
+					yybegin(BLK_COMMENT);}
+<BLK_COMMENT> {
+	"/*"	{nestedBlockCommentCount += 1;
+			yychar -= 2;}
+	"*/"	{nestedBlockCommentCount -= 1;
+			yychar -= 2;
+			if (nestedBlockCommentCount == 0){
+				yybegin(YYINITIAL);
+			}}
+	{blockCommentChar}+	{yychar -= yytext().length();}
+}
+
+
+<YYINITIAL>	\"	{ yybegin(PARSE_STRING); }
+
+<PARSE_STRING>{
+	\"			{
+					yybegin(YYINITIAL);
+					Symbol s = new Symbol(sym.STRING, strBuff.toString());
+					strBuff = new StringBuffer();
+					return s;
+				}
+
+	\\			{ yybegin(ESCAPE_SEQUENCE); }
+
+<ESCAPE_SEQUENCE>
+	{
+			\\ { yybegin(PARSE_STRING); strBuff.append("\\"); }
+			n  { yybegin(PARSE_STRING); strBuff.append("\n"); }			
+			t  { yybegin(PARSE_STRING); strBuff.append("\t"); }
+	}
+
+	{stringBreak}	{ /* User generated line break within a string. Do nothing */ }
+	{stringChar}+	{strBuff.append(yytext());}
+}
+
+<YYINITIAL>	"//"~{nl}	{/* Line comment. Do Nothing*/}
+
+<YYINITIAL>	"/*"	{nestedBlockCommentCount += 1;
+					yychar -= 2;
+					yybegin(BLK_COMMENT);}
+<BLK_COMMENT> {
+	"/*"	{nestedBlockCommentCount += 1;
+			yychar -= 2;}
+	"*/"	{nestedBlockCommentCount -= 1;
+			yychar -= 2;
+			if (nestedBlockCommentCount == 0){
+				yybegin(YYINITIAL);
+			}}
+	{blockCommentChar}+	{yychar -= yytext().length();}
+}
+
+<YYINITIAL> {VAR_COMP}*{ALPHA}{VAR_COMP}*  {return new Symbol(sym.VAR, yytext());}
 
 <YYINITIAL> . { throw new Error("Illegal character <" + yytext()+">"); }

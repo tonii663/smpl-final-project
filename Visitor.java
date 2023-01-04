@@ -23,6 +23,10 @@ public interface Visitor<S, T>
 	public T visitExpMod(ExpMod exp, S state);
 	public T visitExpCmp(ExpCmp exp, S state);
 
+	public T visitExpBitAnd(ExpBitAnd exp, S state);
+	public T visitExpBitOr(ExpBitOr exp, S state);
+	public T visitExpBitNot(ExpBitNot exp, S state);
+
 	public T visitExpAnd(ExpAnd exp, S state);
 	public T visitExpOr(ExpOr exp, S state);
 	public T visitExpNot(ExpNot exp, S state);

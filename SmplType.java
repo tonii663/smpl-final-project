@@ -27,6 +27,27 @@ public abstract class SmplType<T>
 		throw new TypeException();
 	}
 
+	public SmplType substr(SmplType v1, SmplType v2) throws TypeException
+	{
+		throw new TypeException();
+	}
+
+	
+	public SmplType bitwiseAnd(SmplType v) throws TypeException
+	{
+		throw new TypeException();
+	}
+	
+	public SmplType bitwiseOr(SmplType v) throws TypeException
+	{
+		throw new TypeException();
+	}
+
+	public SmplType bitwiseNot() throws TypeException
+	{
+		throw new TypeException();
+	}
+
 	public SmplType add(SmplType v) throws TypeException
 	{
 		throw new TypeException();

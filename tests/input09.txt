@@ -1,0 +1,7 @@
+q+r := "hello world";
+
+println(q+r);
+
+println(eqv?(#cf, #cd));
+
+print(not (#t and #f));

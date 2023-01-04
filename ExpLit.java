@@ -21,7 +21,7 @@ public class ExpLit extends Exp
 		return value;
 	}
 	
-	public <S, T> T visit(Visitor<S, T> v, S arg)
+	public <S, T> T visit(Visitor<S, T> v, S arg) throws VisitException
 	{
 		return v.visitExpLit(this, arg);
     }

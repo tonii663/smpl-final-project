@@ -43,7 +43,7 @@ scan with {:
 
 terminal COLON, LPAREN, RPAREN, LBRACE, RBRACE, LBRACKET, RBRACKET, LB_COLON, RB_COLON;
 terminal IS_PAIR, PAIR, CAR, CDR, LIST, SIZE, EQV, EQL, SUBSTR, DEF, PROC, NIL;
-terminal PRINT, PRINTLN;
+terminal PRINT, PRINTLN, READ, READINT;
 
 // Arithmetic operators
 terminal PLUS, MINUS, MUL, DIV, MOD;
@@ -68,7 +68,7 @@ terminal FALSE;
 
 non terminal ExpLit bool;
 
-non terminal Exp expression, addSub, boolExp, cmp, bitwise, bitNot, term, factor;
+non terminal Exp expression, expSeq, addSub, boolExp, cmp, bitwise, bitNot, term, factor;
 non terminal Statement stmt;
 non terminal StatementSequence stmtList;
 non terminal StatementDefinition definition;
@@ -99,7 +99,7 @@ non terminal ArrayList<Exp> subVectorListE;
 
 non terminal ExpOps ops;
 
-non terminal Exp print, println;
+non terminal Exp print, println, read, readInt;
 
 non terminal StmtIf, stmtIf, stmtElse;
 non terminal Exp cmpExp; 
@@ -130,13 +130,12 @@ paramList ::= paramList:seq COMMA VAR:v  {: seq.add(v); RESULT = seq; :} |
 					RESULT = result;
 			:};
 
-definition ::= DEF VAR:var expression:e SEMI {: RESULT = new StatementDefinition(var, e); :} |
-		   	   VAR:var ASSIGN expression:e SEMI {: RESULT = new StatementDefinition(var, e); :};
+definition ::= DEF VAR:var expression:e SEMI {: RESULT = new StatementDefinition(var, e); :};		   	   
 
 // expression:e LBRACKET expression:i RBRACKET {: RESULT = new ExpOps("index", e, i); :} |
 
 funcCall ::= VAR:v LPAREN argListE:aList RPAREN {: RESULT = new ExpFuncCall(v, aList); :};
-
+		   
 argList ::= argList:seq COMMA expression:e  {: seq.add(e); RESULT = seq; :} |
 			 	 expression:e {:
 					ArrayList<Exp> result = new ArrayList<>();
@@ -150,8 +149,12 @@ argListE ::= argList:aList {: RESULT = aList; :} |
 bool ::= TRUE {: RESULT = new ExpLit(true, "smpl-boolean"); :} |
 	 	 FALSE {: RESULT = new ExpLit(false, "smpl-boolean"); :};
 
+expression ::= boolExp:b {: RESULT = b; :} |
+		   	   expSeq:seq {: RESULT = seq; :} |
+			   VAR:var ASSIGN expression:e {: RESULT = new ExpAssign(var, e); :};
 
-expression ::= boolExp:b {: RESULT = b; :};
+expSeq ::= LBRACE argList:seq RBRACE
+	   	   {: RESULT = new ExpSeq(seq); :};
 
 boolExp ::= boolExp:b AND cmp:c {: RESULT = new ExpAnd(b, c); :} |
 			boolExp:b OR cmp:c  {: RESULT = new ExpOr(b, c); :} |
@@ -187,7 +190,8 @@ factor ::= funcCall:f {: RESULT = f; :} |
 		   vector:v {: RESULT = v; :} |
 		   list:l {: RESULT = l; :} |
 		   ops:o {: RESULT = o; :} |
-		   print:p {: RESULT = p; :} |		   
+		   print:p {: RESULT = p; :} |
+		   read:r {: RESULT = r; :} |
 		   VAR:var {: RESULT = new ExpVar(var); :} |
 		   LPAREN expression:e RPAREN {: RESULT = e; :} |		   
 		   LPAREN MINUS expression:e RPAREN {: :};
@@ -196,6 +200,9 @@ print ::= PRINT LPAREN expression:exp RPAREN
 	  	  {: RESULT = new ExpPrint(exp); :} |
 		  PRINTLN LPAREN expression:exp RPAREN
 	  	  {: RESULT = new ExpPrintln(exp); :};
+
+read ::= READ LPAREN RPAREN {: RESULT = new ExpRead(); :} |
+	 	 READINT LPAREN RPAREN {: RESULT = new ExpReadInt(); :};
 
 ops ::= SIZE LPAREN expression:e RPAREN {: RESULT = new ExpOps("size", e); :} |
 		CAR LPAREN expression:e RPAREN {: RESULT = new ExpOps("car", e); :} |

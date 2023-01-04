@@ -6,7 +6,7 @@ public class ExpBitNot extends ExpUnaryOperator
     }
 
 	
-    public <S, T> T visit(Visitor<S, T> v, S state)
+    public <S, T> T visit(Visitor<S, T> v, S state) throws VisitException
 	{
 		return v.visitExpBitNot(this, state);
     }

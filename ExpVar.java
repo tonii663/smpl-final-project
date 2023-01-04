@@ -12,7 +12,7 @@ public class ExpVar extends Exp
 		return var;
     }
 
-    public <S, T> T visit(Visitor<S, T> v, S arg)
+    public <S, T> T visit(Visitor<S, T> v, S arg) throws VisitException
 	{
 		return v.visitExpVar(this, arg);
     }

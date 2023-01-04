@@ -162,6 +162,8 @@ VAR_COMP = {ALPHANUM}|{SYMBOLS}
 <YYINITIAL> "proc"      {return new Symbol(sym.PROC);}
 <YYINITIAL> "print"     {return new Symbol(sym.PRINT);}
 <YYINITIAL> "println"   {return new Symbol(sym.PRINTLN);}
+<YYINITIAL> "read"      {return new Symbol(sym.READ);}
+<YYINITIAL> "readInt"   {return new Symbol(sym.READINT);}
 
 <YYINITIAL> "and"       {return new Symbol(sym.AND);}
 <YYINITIAL> "or"        {return new Symbol(sym.OR);}

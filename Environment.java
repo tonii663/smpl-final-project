@@ -58,6 +58,21 @@ public class Environment<T>
 		dictionary.put(id, value);
     }
 
+	public void reassign(String id, T value)
+	{
+		try
+		{
+			T t = get(id);
+			put(id, value);
+		}
+		catch(UnboundVarException ex)
+		{
+			throw new UnboundVarException(id);
+		}
+	
+		dictionary.put(id, value);
+    }
+
 	public T get(String id) throws UnboundVarException
 	{
 		T result = dictionary.get(id);

@@ -5,7 +5,7 @@ public class ExpPrint extends Exp
 		super("print", exp);
 	}
 
-	public <S, T> T visit(Visitor<S, T> v, S state)
+	public <S, T> T visit(Visitor<S, T> v, S state) throws VisitException
 	{
 		return v.visitExpPrint(this, state);
 	}

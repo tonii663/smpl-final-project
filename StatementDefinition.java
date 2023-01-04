@@ -6,7 +6,7 @@ public class StatementDefinition extends Statement
 	
 	public StatementDefinition(String id, Exp exp)
 	{
-		super(":=", exp);
+		super("def", exp);
 		this.id = id;		
 	}
 
@@ -20,7 +20,7 @@ public class StatementDefinition extends Statement
 		return getSubTree(0);
     }
 
-    public <S, T> T visit(Visitor<S, T> v, S state)
+    public <S, T> T visit(Visitor<S, T> v, S state)  throws VisitException
 	{
 		return v.visitStatementDefinition(this, state);
     }

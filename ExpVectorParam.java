@@ -27,7 +27,7 @@ public class ExpVectorParam extends Exp
 		return iter;
 	}
 	
-	public <S, T> T visit(Visitor<S, T> v, S arg)
+	public <S, T> T visit(Visitor<S, T> v, S arg) throws VisitException
 	{
 		return v.visitExpVectorParam(this, arg);
     }

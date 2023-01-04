@@ -37,5 +37,5 @@ public abstract class ASTNode<E extends ASTNode>
 		return name;
     }
 
-	public abstract <S, T> T visit(Visitor<S, T> v, S state);
+	public abstract <S, T> T visit(Visitor<S, T> v, S state)  throws VisitException;
 }

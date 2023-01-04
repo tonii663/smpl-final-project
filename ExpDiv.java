@@ -6,7 +6,7 @@ public class ExpDiv extends ExpBinaryOperator
 		super("/", e1, e2);
     }
 
-    public <S, T> T visit(Visitor<S, T> v, S state)
+    public <S, T> T visit(Visitor<S, T> v, S state)  throws VisitException
 	{
 		return v.visitExpDiv(this, state);
     }

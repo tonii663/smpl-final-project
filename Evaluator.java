@@ -1,39 +1,55 @@
 import java.util.*;
+import java.io.*;
 
 public class Evaluator implements Visitor<Environment<SmplType>, SmplType>
 {
-	public Environment<SmplType> getDefaultState()
+	private BufferedReader reader;
+
+	public Evaluator()
 	{
-		return Environment.makeGlobalEnv(SmplType.class);
-    }
+		reader = new BufferedReader(new InputStreamReader(System.in));
+	}
 	
-	public SmplType visitSmplProgram(SmplProgram program, Environment<SmplType> state)
+	public Environment<SmplType> getDefaultState()
+	{		
+		return Environment.makeGlobalEnv(SmplType.class);		
+	}
+	
+	public SmplType visitSmplProgram(SmplProgram program, Environment<SmplType> state)  throws VisitException
 	{
 		SmplType result = program.getSeq().visit(this, state);
 		return result;
 	}
 	
-	public SmplType visitStatement(Statement stmt, Environment<SmplType> state)
+	public SmplType visitStatement(Statement stmt, Environment<SmplType> state) throws VisitException
 	{
 		return stmt.getExp().visit(this, state);
 	}
 
-	public SmplType visitStmtFuncDefinition(StmtFuncDefinition fd, Environment<SmplType> state)
+	public SmplType visitStmtFuncDefinition(StmtFuncDefinition fd, Environment<SmplType> state) throws VisitException
 	{
 		Closure closure = new Closure(fd, state);
 		state.putClosure(fd.getName(), closure);
 		return new SmplNil();
 	}
 
-	public SmplType visitStatementDefinition(StatementDefinition def, Environment<SmplType> state)
+	public SmplType visitStatementDefinition(StatementDefinition def, Environment<SmplType> state) throws VisitException
 	{
 		SmplType result;
 		result = def.getExp().visit(this, state);
 		state.put(def.getId(), result);
 		return result;
 	}
-	
-	public SmplType visitStatementSequence(StatementSequence sseq, Environment<SmplType> state)
+
+	public SmplType visitExpAssign(ExpAssign exp, Environment<SmplType> state) throws VisitException
+	{
+		SmplType result;		
+		result = exp.getExp().visit(this, state);		
+		state.reassign(exp.getId(), result);
+		return result;
+	}
+
+	public SmplType visitStatementSequence(StatementSequence sseq, Environment<SmplType> state) throws VisitException
 	{
 		Statement s;
 		ArrayList seq = sseq.getSeq();
@@ -49,7 +65,7 @@ public class Evaluator implements Visitor<Environment<SmplType>, SmplType>
 		return result;
 	}
 
-	public SmplType visitExpFuncCall(ExpFuncCall exp, Environment<SmplType> state)
+	public SmplType visitExpFuncCall(ExpFuncCall exp, Environment<SmplType> state) throws VisitException
 	{
 		SmplType result;
 		
@@ -77,7 +93,7 @@ public class Evaluator implements Visitor<Environment<SmplType>, SmplType>
 		return result;
 	}	
 
-	public SmplType visitExpBitAnd(ExpBitAnd exp, Environment<SmplType> state)
+	public SmplType visitExpBitAnd(ExpBitAnd exp, Environment<SmplType> state) throws VisitException
 	{
 		SmplType val1, val2;
 		val1 = exp.getLeftExp().visit(this, state);
@@ -86,7 +102,7 @@ public class Evaluator implements Visitor<Environment<SmplType>, SmplType>
 		return val1.bitwiseAnd(val2);
 	}	
 	
-	public SmplType visitExpBitOr(ExpBitOr exp, Environment<SmplType> state)
+	public SmplType visitExpBitOr(ExpBitOr exp, Environment<SmplType> state) throws VisitException
 	{
 		SmplType val1, val2;
 		val1 = exp.getLeftExp().visit(this, state);
@@ -95,7 +111,7 @@ public class Evaluator implements Visitor<Environment<SmplType>, SmplType>
 		return val1.bitwiseOr(val2);
 	}	
 	
-	public SmplType visitExpBitNot(ExpBitNot exp, Environment<SmplType> state)
+	public SmplType visitExpBitNot(ExpBitNot exp, Environment<SmplType> state) throws VisitException
 	{
 		SmplType val;
 		val = exp.getExp().visit(this, state);		
@@ -103,7 +119,7 @@ public class Evaluator implements Visitor<Environment<SmplType>, SmplType>
 	}	
 
 	
-	public SmplType visitExpAdd(ExpAdd exp, Environment<SmplType> state)
+	public SmplType visitExpAdd(ExpAdd exp, Environment<SmplType> state) throws VisitException
 	{
 		SmplType val1, val2;
 		val1 = exp.getLeftExp().visit(this, state);
@@ -112,7 +128,7 @@ public class Evaluator implements Visitor<Environment<SmplType>, SmplType>
 		return val1.add(val2);
 	}	
 
-	public SmplType visitExpSub(ExpSub exp, Environment<SmplType> state)
+	public SmplType visitExpSub(ExpSub exp, Environment<SmplType> state) throws VisitException
 	{
 		SmplType val1, val2;
 		val1 = exp.getLeftExp().visit(this, state);
@@ -121,7 +137,7 @@ public class Evaluator implements Visitor<Environment<SmplType>, SmplType>
 		return val1.sub(val2);
 	}
 	
-    public SmplType visitExpMul(ExpMul exp, Environment<SmplType> state)
+    public SmplType visitExpMul(ExpMul exp, Environment<SmplType> state) throws VisitException
 	{
 		SmplType val1, val2;
 		val1 = exp.getLeftExp().visit(this, state);
@@ -130,7 +146,7 @@ public class Evaluator implements Visitor<Environment<SmplType>, SmplType>
 		return val1.mul(val2);
 	}
 	
-    public SmplType visitExpDiv(ExpDiv exp, Environment<SmplType> state)
+    public SmplType visitExpDiv(ExpDiv exp, Environment<SmplType> state) throws VisitException
 	{
 		SmplType val1, val2;
 		val1 = exp.getLeftExp().visit(this, state);
@@ -139,7 +155,7 @@ public class Evaluator implements Visitor<Environment<SmplType>, SmplType>
 		return val1.div(val2);
 	}
 
-	public SmplType visitExpMod(ExpMod exp, Environment<SmplType> state)
+	public SmplType visitExpMod(ExpMod exp, Environment<SmplType> state) throws VisitException
 	{
 		SmplType val1, val2;
 		val1 = exp.getLeftExp().visit(this, state);
@@ -148,7 +164,7 @@ public class Evaluator implements Visitor<Environment<SmplType>, SmplType>
 		return val1.mod(val2);
 	}
 
-	public SmplType visitExpCmp(ExpCmp exp, Environment<SmplType> state)
+	public SmplType visitExpCmp(ExpCmp exp, Environment<SmplType> state) throws VisitException
 	{
 		SmplType val1, val2;
 		val1 = exp.getLeftExp().visit(this, state);
@@ -197,7 +213,7 @@ public class Evaluator implements Visitor<Environment<SmplType>, SmplType>
 		}		
 	}
 
-	public SmplType visitExpAnd(ExpAnd exp, Environment<SmplType> state)
+	public SmplType visitExpAnd(ExpAnd exp, Environment<SmplType> state) throws VisitException
 	{
 		SmplType val1, val2;
 		val1 = exp.getLeftExp().visit(this, state);
@@ -206,7 +222,7 @@ public class Evaluator implements Visitor<Environment<SmplType>, SmplType>
 		return val1.and(val2);
 	}
 
-	public SmplType visitExpOr(ExpOr exp, Environment<SmplType> state)
+	public SmplType visitExpOr(ExpOr exp, Environment<SmplType> state) throws VisitException
 	{
 		SmplType val1, val2;
 		val1 = exp.getLeftExp().visit(this, state);
@@ -215,35 +231,64 @@ public class Evaluator implements Visitor<Environment<SmplType>, SmplType>
 		return val1.or(val2);
 	}
 
-	public SmplType visitExpNot(ExpNot exp, Environment<SmplType> state)
+	public SmplType visitExpNot(ExpNot exp, Environment<SmplType> state) throws VisitException
 	{
 		SmplType val;
 		val = exp.getExp().visit(this, state);		
 		return val.not();
 	}
 
-	public SmplType visitExpPrint(ExpPrint exp, Environment<SmplType> state)
+	public SmplType visitExpPrint(ExpPrint exp, Environment<SmplType> state) throws VisitException
 	{
 		SmplType r = exp.getSubTree(0).visit(this, state);
 		System.out.print(r.toString());
 		return r;
 	}
-
-	public SmplType visitExpPrintln(ExpPrintln exp, Environment<SmplType> state)
+	
+	public SmplType visitExpPrintln(ExpPrintln exp, Environment<SmplType> state) throws VisitException
 	{
 		SmplType r = exp.getSubTree(0).visit(this, state);
 		System.out.println(r.toString());
 		return r;
 	}
 
+
+	public SmplType visitExpRead(ExpRead exp, Environment<SmplType> state) throws VisitException
+	{
+		try
+		{
+			SmplType result = new SmplString(reader.readLine());
+			return result;
+		}
+		catch(IOException io)
+		{
+			return new SmplNil();
+		}
+		
+		
+	}
+
+	public SmplType visitExpReadInt(ExpReadInt exp, Environment<SmplType> state) throws VisitException
+	{
+		try
+		{
+			String result = reader.readLine();
+			return new SmplInteger(Integer.parseInt(result));
+		}
+		catch(IOException io)
+		{
+			return new SmplNil();
+		}						
+	}
+
 	
-    public SmplType visitExpVar(ExpVar exp, Environment<SmplType> state)
+    public SmplType visitExpVar(ExpVar exp, Environment<SmplType> state) throws VisitException
 	{
 		return state.get(exp.getVar());
 	}	
 
 
-	public SmplType visitExpOps(ExpOps exp, Environment<SmplType> state)
+	public SmplType visitExpOps(ExpOps exp, Environment<SmplType> state) throws VisitException
 	{				
 		switch(exp.getOp())
 		{
@@ -299,12 +344,26 @@ public class Evaluator implements Visitor<Environment<SmplType>, SmplType>
 
 	
 	public SmplType visitExpVectorParamList(ExpVectorParamList exp,
-											Environment<SmplType> state)
+											Environment<SmplType> state) throws VisitException
 	{
 		return new SmplRaw(exp.getValues());
 	}
-	
-	public SmplType visitExpVectorParam(ExpVectorParam exp, Environment<SmplType> state)
+
+	public SmplType visitExpSeq(ExpSeq exp,
+								Environment<SmplType> state) throws VisitException
+	{
+		SmplType result = new SmplNil();
+
+		ArrayList<Exp> exprs = exp.getSubTrees();
+		for(Exp e : exprs )
+		{
+			result = e.visit(this, state);
+		}
+
+		return result;
+	}
+
+	public SmplType visitExpVectorParam(ExpVectorParam exp, Environment<SmplType> state) throws VisitException
 	{
 		ArrayList<SmplType> result = new ArrayList<>();
 
@@ -336,7 +395,7 @@ public class Evaluator implements Visitor<Environment<SmplType>, SmplType>
 		return new SmplRaw(result);
 	}
 	
-	public SmplType visitExpLit(ExpLit exp, Environment<SmplType> state)
+	public SmplType visitExpLit(ExpLit exp, Environment<SmplType> state) throws VisitException
 	{
 		switch(exp.getType())
 		{

@@ -14,7 +14,7 @@ public class ExpVectorParamList extends Exp
 		return values;
 	}
 	
-	public <S, T> T visit(Visitor<S, T> v, S arg)
+	public <S, T> T visit(Visitor<S, T> v, S arg) throws VisitException
 	{
 		return v.visitExpVectorParamList(this, arg);
     }

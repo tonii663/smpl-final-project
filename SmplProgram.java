@@ -11,7 +11,7 @@ public class SmplProgram extends ASTNode<StatementSequence>
 		return getSubTree(0);
     }
 
-    public <S, T>  T visit(Visitor<S, T> v, S state)
+    public <S, T>  T visit(Visitor<S, T> v, S state) throws VisitException
 	{
 		return v.visitSmplProgram(this, state);
     }

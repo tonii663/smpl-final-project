@@ -9,7 +9,7 @@ public class ExpFuncCall extends Exp
 		super(funName, args);
 	}
 
-	public <S, T> T visit(Visitor<S,T> v, S arg)
+	public <S, T> T visit(Visitor<S,T> v, S arg)  throws VisitException
 	{
 		return v.visitExpFuncCall(this, arg);
     }	

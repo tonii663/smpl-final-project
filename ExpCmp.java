@@ -10,7 +10,7 @@ public class ExpCmp extends ExpBinaryOperator
 		return getName();
 	}
 	
-	public <S, T> T visit(Visitor<S, T> v, S arg)
+	public <S, T> T visit(Visitor<S, T> v, S arg)  throws VisitException
 	{
 		return v.visitExpCmp(this, arg);
     }

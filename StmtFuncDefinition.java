@@ -28,7 +28,7 @@ public class StmtFuncDefinition extends Statement {
 		return body;
 	}
 
-	public <S, T> T visit(Visitor<S,T> v, S arg)
+	public <S, T> T visit(Visitor<S,T> v, S arg)  throws VisitException
 	{
 		return v.visitStmtFuncDefinition(this, arg);
     }	

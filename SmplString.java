@@ -5,6 +5,12 @@ public class SmplString extends SmplType<String>
 		super(value);
 	}
 
+	public SmplType add(SmplType v)
+	{
+		String result = toString() + v.toString();
+		return new SmplString(result);
+	}
+
 	public SmplType substr(SmplType st, SmplType en) 
 	{
 		if((st instanceof SmplInteger) && (en instanceof SmplInteger))

@@ -13,7 +13,7 @@ public class ExpOps extends Exp
 		return operation;
 	}
 	
-    public <S, T> T visit(Visitor<S, T> v, S state)
+    public <S, T> T visit(Visitor<S, T> v, S state) throws VisitException
 	{
 		return v.visitExpOps(this, state);
     }

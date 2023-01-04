@@ -20,7 +20,7 @@ public abstract class Walker<S, T>
 
 
 	// NOTE(afb) :: Given a AST it walks it.
-    public T walk(ASTNode<? extends ASTNode> expr)
+    public T walk(ASTNode<? extends ASTNode> expr) throws VisitException 
 	{
 		return expr.visit(visitor, state);
     }
@@ -39,9 +39,17 @@ public abstract class Walker<S, T>
 			System.out.println(e.getMessage());
 			return null;
 		}
-		
-		T result = walk(program);
-		return result;
+
+		try
+		{
+			T result = walk(program);
+			return result;
+		}
+		catch(VisitException e)
+		{
+			System.out.println(e.getMessage());
+			return null;
+		}
 	}
 
 }

@@ -1,0 +1,6 @@
+x := pair(1, 2);
+y := pair(1, 2);
+z := x;
+equal?(y, z);
+
+equal?(#cA, #cB);

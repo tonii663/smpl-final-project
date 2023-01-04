@@ -146,6 +146,20 @@ public class Evaluator implements Visitor<Environment<SmplType>, SmplType>
 		return val.not();
 	}
 
+	public SmplType visitExpPrint(ExpPrint exp, Environment<SmplType> state)
+	{
+		SmplType r = exp.getSubTree(0).visit(this, state);
+		System.out.print(r.toString());
+		return r;
+	}
+
+	public SmplType visitExpPrintln(ExpPrintln exp, Environment<SmplType> state)
+	{
+		SmplType r = exp.getSubTree(0).visit(this, state);
+		System.out.println(r.toString());
+		return r;
+	}
+
 	
     public SmplType visitExpVar(ExpVar exp, Environment<SmplType> state)
 	{
@@ -180,6 +194,11 @@ public class Evaluator implements Visitor<Environment<SmplType>, SmplType>
 			case("index"):
 			{
 				return exp.getSubTree(0).visit(this, state).index(exp.getSubTree(0).visit(this, state));
+			}
+			
+			case("equ"):
+			{
+				return exp.getSubTree(0).visit(this, state).isEqu(exp.getSubTree(1).visit(this, state));
 			}
 
 			default:

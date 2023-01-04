@@ -107,7 +107,7 @@ public abstract class SmplType<T>
 	{
 		throw new TypeException();
 	}
-
+		
 	public SmplType isPair()
 	{
 		return new SmplBoolean(false);
@@ -118,4 +118,13 @@ public abstract class SmplType<T>
 		return new SmplBoolean(false);
 	}
 
+	public SmplType isEqv(SmplType v) throws TypeException
+	{
+		throw new TypeException();
+	}
+	
+	public SmplType isEqu(SmplType v) throws TypeException
+	{
+		throw new TypeException();
+	}
 }

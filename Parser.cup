@@ -42,7 +42,8 @@ scan with {:
 
 
 terminal LPAREN, RPAREN, LBRACE, RBRACE, LBRACKET, RBRACKET, LB_COLON, RB_COLON;
-terminal IS_PAIR, PAIR, CAR, CDR, LIST, SIZE, EQV, EQL, SUBSTR, DEF, PROC;
+terminal IS_PAIR, PAIR, CAR, CDR, LIST, SIZE, EQV, EQL, SUBSTR, DEF, PROC, NIL;
+terminal PRINT, PRINTLN;
 
 // Arithmetic operators
 terminal PLUS, MINUS, MUL, DIV, MOD;
@@ -51,7 +52,7 @@ terminal BIT_AND, BIT_OR, BIT_NOT;
 terminal SEMI, AT;
 
 // Comparators
-terminal GT, LT, GE, LE, NE, ASSIGN, COMMA;
+terminal GT, LT, GE, LE, NE, ASSIGN, EQUAL, COMMA;
 
 // Types
 terminal String VAR;
@@ -86,6 +87,8 @@ non terminal Exp vector;
 non terminal ArrayList<Exp> vectorBody;
 
 non terminal ExpOps ops;
+
+non terminal Exp print, println;
 
 non terminal empty;
 
@@ -153,22 +156,33 @@ factor ::= funcCall:f {: RESULT = f; :} |
 		   vector:v {: RESULT = v; :} |
 		   list:l {: RESULT = l; :} |
 		   ops:o {: RESULT = o; :} |
+		   print:p {: RESULT = p; :} |
 		   VAR:var {: RESULT = new ExpVar(var); :} |
 		   LPAREN expression:e RPAREN {: RESULT = e; :} |		   
 		   LPAREN MINUS expression:e RPAREN {: :};
 
+print ::= PRINT LPAREN expression:exp RPAREN
+	  	  {: RESULT = new ExpPrint(exp); :} |
+		  PRINTLN LPAREN expression:exp RPAREN
+	  	  {: RESULT = new ExpPrintln(exp); :};
+
 ops ::= SIZE LPAREN expression:e RPAREN {: RESULT = new ExpOps("size", e); :} |
 		CAR LPAREN expression:e RPAREN {: RESULT = new ExpOps("car", e); :} |
 		CDR LPAREN expression:e RPAREN {: RESULT = new ExpOps("cdr", e); :} |
-		IS_PAIR LPAREN expression:e RPAREN {: RESULT = new ExpOps("is-pair", e); :};		
+		EQV LPAREN expression:e1 COMMA expression:e2 RPAREN {: RESULT = new ExpOps("eqv", e1, e2); :} |
+		EQL LPAREN expression:e1 COMMA expression:e2 RPAREN {: RESULT = new ExpOps("equ", e1, e2); :} |
+		IS_PAIR LPAREN expression:e RPAREN {: RESULT = new ExpOps("is-pair", e); :};
+
 
 list ::= LBRACKET argListE:aList RBRACKET
 	   	 {: RESULT = new ExpLit(aList, "smpl-list"); :} |
 		 LIST LPAREN argListE:aList RPAREN
 		 {: RESULT = new ExpLit(aList, "smpl-list"); :};
-		   
+
+
 vector ::= LB_COLON argListE:aList RB_COLON
 	   	   {: RESULT = new ExpLit(aList, "smpl-vector"); :};
+
 
 pair ::= PAIR LPAREN expression:e1 COMMA expression:e2 RPAREN
 	 	 {:
@@ -177,4 +191,5 @@ pair ::= PAIR LPAREN expression:e1 COMMA expression:e2 RPAREN
 			r.add(e2);
 			RESULT = new ExpLit(r, "smpl-pair");
 		:};
+		
 empty ::= ;

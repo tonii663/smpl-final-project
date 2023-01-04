@@ -29,6 +29,8 @@ public interface Visitor<S, T>
 	public T visitExpVar(ExpVar exp, S state);
 	public T visitExpLit(ExpLit exp, S state);
 	public T visitExpOps(ExpOps exp, S state);
+	public T visitExpPrint(ExpPrint exp, S state);
+	public T visitExpPrintln(ExpPrintln exp, S state);
 
 	
 	// public T visitExpPair(ExpPair exp, S state);

@@ -4,7 +4,23 @@ public class SmplDouble extends SmplType<Double>
 	{
 		super(value);
 	}
+	
+	public SmplType isEqu(SmplType v)
+	{
+		if(v instanceof SmplDouble)
+		{			
+			SmplDouble i = (SmplDouble)v;
 
+			Double r1 = (Double)i.getValue();
+			Double r2 = (Double)getValue();
+			
+			return new SmplBoolean(r1 == r2);
+		}
+		
+		return new SmplBoolean(false);
+	}
+
+	
 	public SmplType add(SmplType v)
 	{
 		if(v instanceof SmplInteger)

@@ -7,35 +7,38 @@
 public class sym {
   /* terminals */
   public static final int LBRACKET = 6;
-  public static final int CHAR = 44;
-  public static final int GE = 36;
-  public static final int BIT_NOT = 31;
-  public static final int BIT_AND = 29;
+  public static final int CHAR = 48;
+  public static final int GE = 39;
+  public static final int BIT_NOT = 34;
+  public static final int BIT_AND = 32;
   public static final int CAR = 12;
-  public static final int DOUBLE = 43;
+  public static final int DOUBLE = 47;
+  public static final int SEMI = 35;
   public static final int CDR = 13;
   public static final int LPAREN = 2;
-  public static final int SEMI = 32;
-  public static final int INT = 42;
-  public static final int MINUS = 22;
+  public static final int INT = 46;
+  public static final int PRINTLN = 23;
+  public static final int MINUS = 25;
   public static final int RPAREN = 3;
-  public static final int NOT = 28;
-  public static final int AND = 26;
-  public static final int LT = 35;
+  public static final int NOT = 31;
+  public static final int AND = 29;
+  public static final int LT = 38;
   public static final int RB_COLON = 9;
-  public static final int OR = 27;
-  public static final int COMMA = 40;
-  public static final int DIV = 24;
-  public static final int PLUS = 21;
-  public static final int ASSIGN = 39;
-  public static final int LE = 37;
+  public static final int NIL = 21;
+  public static final int OR = 30;
+  public static final int COMMA = 44;
+  public static final int DIV = 27;
+  public static final int PLUS = 24;
+  public static final int ASSIGN = 42;
+  public static final int LE = 40;
   public static final int EOF = 0;
+  public static final int EQUAL = 43;
   public static final int RBRACKET = 7;
-  public static final int TRUE = 45;
+  public static final int TRUE = 49;
   public static final int SIZE = 15;
   public static final int error = 1;
-  public static final int MUL = 23;
-  public static final int MOD = 25;
+  public static final int MUL = 26;
+  public static final int MOD = 28;
   public static final int PAIR = 11;
   public static final int IS_PAIR = 10;
   public static final int EQV = 16;
@@ -44,15 +47,16 @@ public class sym {
   public static final int EQL = 17;
   public static final int SUBSTR = 18;
   public static final int RBRACE = 5;
-  public static final int NE = 38;
+  public static final int NE = 41;
   public static final int LB_COLON = 8;
   public static final int PROC = 20;
   public static final int DEF = 19;
-  public static final int BIT_OR = 30;
-  public static final int AT = 33;
-  public static final int FALSE = 46;
-  public static final int GT = 34;
-  public static final int VAR = 41;
+  public static final int AT = 36;
+  public static final int BIT_OR = 33;
+  public static final int FALSE = 50;
+  public static final int GT = 37;
+  public static final int VAR = 45;
+  public static final int PRINT = 22;
   public static final String[] terminalNames = new String[] {
   "EOF",
   "error",
@@ -75,6 +79,9 @@ public class sym {
   "SUBSTR",
   "DEF",
   "PROC",
+  "NIL",
+  "PRINT",
+  "PRINTLN",
   "PLUS",
   "MINUS",
   "MUL",
@@ -94,6 +101,7 @@ public class sym {
   "LE",
   "NE",
   "ASSIGN",
+  "EQUAL",
   "COMMA",
   "VAR",
   "INT",

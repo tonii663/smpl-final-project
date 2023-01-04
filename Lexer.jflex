@@ -77,39 +77,39 @@ import java_cup.runtime.*;
     }
 %}
 
-NEWLINE = [\n\r]
-cc = ([\b\f]|{NEWLINE})
-WHITESPACE = {cc}|[\t ]
+NEWLINE		= [\n\r]
+cc			= ([\b\f]|{NEWLINE})
+WHITESPACE	= {cc}|[\t ]
 
-BINARY = [10]
-HEX = [0-9A-Fa-f]
-DIGIT = [0-9]
-ALPHA = [a-zA-Z_]
-ALPHANUM = {alpha}|{NUM}
-DOUBLE = ({DIGIT}+\.{DIGIT}*)|({DIGIT}*.{DIGIT}+)
-CHAR = [A-Za-z_]
-ID = {CHAR}+
+BINARY		= [10]
+HEX			= [0-9A-Fa-f]
+DIGIT		= [0-9]
+ALPHA		= [a-zA-Z_]
+ALPHANUM	= {alpha}|{NUM}
+DOUBLE		= ({DIGIT}+\.{DIGIT}*)|({DIGIT}*.{DIGIT}+)
+CHAR		= [A-Za-z_]
+ID			= {CHAR}+
+
 %%
 
 <YYINITIAL> {NEWLINE}    { yychar = 0; }
 <YYINITIAL> {WHITESPACE} { }
 
-<YYINITIAL> "+"		{return new Symbol(sym.PLUS);}
-<YYINITIAL> "-"		{return new Symbol(sym.MINUS);}
-<YYINITIAL> "*"		{return new Symbol(sym.MUL);}
-<YYINITIAL> "/"		{return new Symbol(sym.DIV);}
-<YYINITIAL> "%"		{return new Symbol(sym.MOD);}
-
-<YYINITIAL> "&"		{return new Symbol(sym.BIT_AND);}
-<YYINITIAL> "|"		{return new Symbol(sym.BIT_OR);}
-<YYINITIAL> "~"		{return new Symbol(sym.BIT_NOT);}
-
-<YYINITIAL> ":="	{return new Symbol(sym.ASSIGN);}                            
-<YYINITIAL> ">"		{return new Symbol(sym.GT);}
-<YYINITIAL> "<"		{return new Symbol(sym.LT);}
-<YYINITIAL> ">="	{return new Symbol(sym.GE);}
-<YYINITIAL> "<="	{return new Symbol(sym.LE);}
-<YYINITIAL> "!="	{return new Symbol(sym.NE);}
+<YYINITIAL> {WHITESPACE}"+"{WHITESPACE}		{return new Symbol(sym.PLUS);}
+<YYINITIAL> {WHITESPACE}"-"{WHITESPACE}		{return new Symbol(sym.MINUS);}
+<YYINITIAL> {WHITESPACE}"*"{WHITESPACE}		{return new Symbol(sym.MUL);}
+<YYINITIAL> {WHITESPACE}"/"{WHITESPACE}		{return new Symbol(sym.DIV);}
+<YYINITIAL> {WHITESPACE}"%"{WHITESPACE}		{return new Symbol(sym.MOD);}
+<YYINITIAL> {WHITESPACE}"&"{WHITESPACE}		{return new Symbol(sym.BIT_AND);}
+<YYINITIAL> {WHITESPACE}"|"{WHITESPACE}		{return new Symbol(sym.BIT_OR);}
+<YYINITIAL> {WHITESPACE}"~"{WHITESPACE}		{return new Symbol(sym.BIT_NOT);}
+<YYINITIAL> {WHITESPACE}":="{WHITESPACE}	{return new Symbol(sym.ASSIGN);}                            
+<YYINITIAL> {WHITESPACE}">"{WHITESPACE}		{return new Symbol(sym.GT);}
+<YYINITIAL> {WHITESPACE}"<"{WHITESPACE}		{return new Symbol(sym.LT);}
+<YYINITIAL> {WHITESPACE}">="{WHITESPACE}	{return new Symbol(sym.GE);}
+<YYINITIAL> {WHITESPACE}"<="{WHITESPACE}	{return new Symbol(sym.LE);}
+<YYINITIAL> {WHITESPACE}"!="{WHITESPACE}	{return new Symbol(sym.NE);}
+<YYINITIAL> {WHITESPACE}"="{WHITESPACE}	    {return new Symbol(sym.EQUAL);}
 
 <YYINITIAL> "("		{return new Symbol(sym.LPAREN);}
 <YYINITIAL> ")"		{return new Symbol(sym.RPAREN);}
@@ -136,18 +136,21 @@ ID = {CHAR}+
 <YYINITIAL> "substr"    {return new Symbol(sym.SUBSTR);}
 <YYINITIAL> "def"       {return new Symbol(sym.DEF);}
 <YYINITIAL> "proc"      {return new Symbol(sym.PROC);}
+<YYINITIAL> "print"     {return new Symbol(sym.PRINT);}
+<YYINITIAL> "println"   {return new Symbol(sym.PRINTLN);}
 
 <YYINITIAL> "and"       {return new Symbol(sym.AND);}
 <YYINITIAL> "or"        {return new Symbol(sym.OR);}
 <YYINITIAL> "not"       {return new Symbol(sym.NOT);}
 
-<YYINITIAL> #c{CHAR}    {return new Symbol(sym.CHAR, ParseChar(yytext()));}
-
 <YYINITIAL> "#t"  {return new Symbol(sym.TRUE);}
 <YYINITIAL> "#f"  {return new Symbol(sym.FALSE);}
+<YYINITIAL> "#e"  {return new Symbol(sym.NIL);}
 
-<YYINITIAL> [-]?{DIGIT}+ {return new Symbol(sym.INT, ParseInteger(yytext()));}
-<YYINITIAL> #x{HEX}+    {return new Symbol(sym.INT, ParseHexToInteger(yytext()));}
+<YYINITIAL> #c{CHAR}    {return new Symbol(sym.CHAR, ParseChar(yytext()));}
+
+<YYINITIAL> [-]?{DIGIT}+	{return new Symbol(sym.INT, ParseInteger(yytext()));}
+<YYINITIAL> #x{HEX}+		{return new Symbol(sym.INT, ParseHexToInteger(yytext()));}
 <YYINITIAL> #b{BINARY}+     {return new Symbol(sym.INT, ParseBinaryToInteger(yytext()));}
 
 <YYINITIAL> {ID}  {return new Symbol(sym.VAR, yytext());}

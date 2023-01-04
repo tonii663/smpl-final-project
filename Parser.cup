@@ -52,7 +52,8 @@ terminal BIT_AND, BIT_OR, BIT_NOT;
 terminal SEMI, AT;
 
 // Comparators
-terminal GT, LT, GE, LE, NE, ASSIGN, EQUAL, COMMA;
+terminal GT, LT, GE, LE, NE;
+terminal ASSIGN, EQUAL, COMMA;
 
 // Types
 terminal String VAR;
@@ -65,7 +66,7 @@ terminal FALSE;
 
 non terminal ExpLit bool;
 
-non terminal Exp expression, boolExp, term, factor;
+non terminal Exp expression, boolExp, cmp, term, factor;
 non terminal Statement stmt;
 non terminal StatementSequence stmtList;
 non terminal StatementDefinition definition;
@@ -80,6 +81,8 @@ non terminal ArrayList<String> paramListE;
 non terminal ExpFuncCall funcCall;
 non terminal ArrayList<Exp> argList;
 non terminal ArrayList<Exp> argListE;
+
+non terminal Exp;
 
 non terminal Exp list;
 non terminal Exp pair;
@@ -140,7 +143,15 @@ bool ::= TRUE {: RESULT = new ExpLit(true, "smpl-boolean"); :} |
 
 boolExp ::= boolExp:b AND term:t {: RESULT = new ExpAnd(b, t); :} |
 			boolExp:b OR term:t {: RESULT = new ExpOr(b, t); :} |			
-			term:t {: RESULT = t; :};
+			cmp:c {: RESULT = c; :};
+
+cmp ::= cmp:c GT term:t {: RESULT = new ExpCmp("GT", c, t); :} |
+		cmp:c LT term:t {: RESULT = new ExpCmp("LT", c, t); :} |
+		cmp:c GE term:t {: RESULT = new ExpCmp("GE", c, t); :} |
+		cmp:c LE term:t {: RESULT = new ExpCmp("LE", c, t); :} |
+		cmp:c NE term:t {: RESULT = new ExpCmp("NE", c, t); :} |
+		cmp:c EQUAL term:t {: RESULT = new ExpCmp("EQUAL", c, t); :} |
+		term:t {: RESULT = t; :};
 
 term ::= term:t MUL factor:f {: RESULT = new ExpMul(t, f); :} |
 	 	 term:t DIV factor:f {: RESULT = new ExpDiv(t, f); :} |

@@ -89,4 +89,120 @@ public class SmplDouble extends SmplType<Double>
 		throw new TypeException();
 	}
 
+	public SmplType lessThan(SmplType v)
+	{			
+		if(v instanceof SmplDouble)
+		{			
+			Double r1 = (Double)getValue();
+			Double r2 = (Double)v.getValue();
+			return new SmplBoolean(r1 < r2);
+		}
+
+		if(v instanceof SmplInteger)
+		{
+			Double r1 = (Double)getValue();
+			Double r2 = Double.valueOf((Integer)v.getValue());
+			return new SmplBoolean(r1 < r2);
+		}
+
+		throw new TypeException();
+	}
+	
+	public SmplType greaterThan(SmplType v)
+	{
+		if(v instanceof SmplDouble)
+		{			
+			Double r1 = (Double)getValue();
+			Double r2 = (Double)v.getValue();
+			return new SmplBoolean(r1 > r2);
+		}
+
+		if(v instanceof SmplInteger)
+		{
+			Double r1 = (Double)getValue();
+			Double r2 = Double.valueOf((Integer)v.getValue());
+			return new SmplBoolean(r1 > r2);
+		}
+
+		throw new TypeException();
+	}
+
+	public SmplType greaterThanOrEqual(SmplType v)
+	{
+		if(v instanceof SmplDouble)
+		{			
+			Double r1 = (Double)getValue();
+			Double r2 = (Double)v.getValue();
+			return new SmplBoolean(r1 >= r2);
+		}
+
+		if(v instanceof SmplInteger)
+		{
+			Double r1 = (Double)getValue();
+			Double r2 = Double.valueOf((Integer)v.getValue());
+			return new SmplBoolean(r1 >= r2);
+		}
+
+		throw new TypeException();
+
+	}
+
+	public SmplType lessThanOrEqual(SmplType v)
+	{
+		if(v instanceof SmplDouble)
+		{			
+			Double r1 = (Double)getValue();
+			Double r2 = (Double)v.getValue();
+			return new SmplBoolean(r1 <= r2);
+		}
+
+		if(v instanceof SmplInteger)
+		{
+			Double r1 = (Double)getValue();
+			Double r2 = Double.valueOf((Integer)v.getValue());
+			return new SmplBoolean(r1 <= r2);
+		}
+
+		throw new TypeException();
+	}
+
+	public SmplType notEqual(SmplType v)
+	{
+		if(v instanceof SmplDouble)
+		{			
+			Double r1 = (Double)getValue();
+			Double r2 = (Double)v.getValue();
+			return new SmplBoolean(r1 != r2);
+		}
+
+		if(v instanceof SmplInteger)
+		{
+			Double r1 = (Double)getValue();
+			Double r2 = Double.valueOf((Integer)v.getValue());
+			return new SmplBoolean(r1 != r2);
+		}
+
+		throw new TypeException();
+	}
+	
+	public SmplType areEqual(SmplType v)
+	{
+		if(v instanceof SmplDouble)
+		{			
+			Double r1 = (Double)getValue();
+			Double r2 = (Double)v.getValue();
+			return new SmplBoolean(r1 == r2);
+		}
+
+		if(v instanceof SmplInteger)
+		{
+			Double r1 = (Double)getValue();
+			Double r2 = Double.valueOf((Integer)v.getValue());
+			return new SmplBoolean(r1 == r2);
+		}
+		
+		throw new TypeException();
+	}
+
+
 }

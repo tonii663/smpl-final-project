@@ -21,6 +21,7 @@ public interface Visitor<S, T>
     public T visitExpMul(ExpMul exp, S state);
     public T visitExpDiv(ExpDiv exp, S state);
 	public T visitExpMod(ExpMod exp, S state);
+	public T visitExpCmp(ExpCmp exp, S state);
 
 	public T visitExpAnd(ExpAnd exp, S state);
 	public T visitExpOr(ExpOr exp, S state);

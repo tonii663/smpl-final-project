@@ -86,7 +86,7 @@ HEX			= [0-9A-Fa-f]
 DIGIT		= [0-9]
 ALPHA		= [a-zA-Z_]
 ALPHANUM	= {alpha}|{NUM}
-DOUBLE		= ({DIGIT}+\.{DIGIT}*)|({DIGIT}*.{DIGIT}+)
+DOUBLE		= [-]?({DIGIT}+\.{DIGIT}*)|({DIGIT}*\.{DIGIT}+)
 CHAR		= [A-Za-z_]
 ID			= {CHAR}+
 
@@ -149,6 +149,7 @@ ID			= {CHAR}+
 
 <YYINITIAL> #c{CHAR}    {return new Symbol(sym.CHAR, ParseChar(yytext()));}
 
+<YYINITIAL> {DOUBLE}	    {return new Symbol(sym.DOUBLE, ParseDouble(yytext()));}
 <YYINITIAL> [-]?{DIGIT}+	{return new Symbol(sym.INT, ParseInteger(yytext()));}
 <YYINITIAL> #x{HEX}+		{return new Symbol(sym.INT, ParseHexToInteger(yytext()));}
 <YYINITIAL> #b{BINARY}+     {return new Symbol(sym.INT, ParseBinaryToInteger(yytext()));}

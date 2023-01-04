@@ -121,6 +121,55 @@ public class Evaluator implements Visitor<Environment<SmplType>, SmplType>
 		return val1.mod(val2);
 	}
 
+	public SmplType visitExpCmp(ExpCmp exp, Environment<SmplType> state)
+	{
+		SmplType val1, val2;
+		val1 = exp.getLeftExp().visit(this, state);
+		val2 = exp.getRightExp().visit(this, state);
+
+		switch(exp.getCmp())
+		{
+			case("GT"):
+			{
+				return val1.greaterThan(val2);
+			}
+
+			case("LT"):
+			{
+				return val1.lessThan(val2);
+			}
+
+
+			case("GE"):
+			{
+				return val1.greaterThanOrEqual(val2);	
+			}
+
+
+			case("LE"):
+			{
+				return val1.lessThanOrEqual(val2);				
+			}
+
+
+			case("NE"):
+			{
+				return val1.notEqual(val2);
+			}
+
+
+			case("EQUAL"):
+			{
+				return val1.areEqual(val2);				
+			}
+
+			default:
+			{
+				return null;
+			}
+		}		
+	}
+
 	public SmplType visitExpAnd(ExpAnd exp, Environment<SmplType> state)
 	{
 		SmplType val1, val2;

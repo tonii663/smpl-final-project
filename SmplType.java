@@ -71,7 +71,6 @@ public abstract class SmplType<T>
 	{
 		throw new TypeException();
 	}
-
 	
 	public SmplType greaterThan(SmplType v) throws TypeException
 	{
@@ -89,6 +88,11 @@ public abstract class SmplType<T>
 	}
 
 	public SmplType notEqual(SmplType v) throws TypeException
+	{
+		throw new TypeException();
+	}
+	
+	public SmplType areEqual(SmplType v) throws TypeException
 	{
 		throw new TypeException();
 	}

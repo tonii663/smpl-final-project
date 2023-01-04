@@ -3,5 +3,5 @@ x := {3 + 3, 3 , 4};
 
 println("Hello, " + "World: " + 68);
 
-x := read();
+// x := read();
 println(x);

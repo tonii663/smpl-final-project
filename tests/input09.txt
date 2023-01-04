@@ -1,4 +1,4 @@
-q+r := "hello world";
+def q+r "hello world";
 
 println(q+r);
 

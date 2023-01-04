@@ -1,2 +1,2 @@
-p := pair(12,2);
+def p pair(12,2);
 pair?(p);

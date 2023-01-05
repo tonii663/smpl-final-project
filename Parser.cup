@@ -69,7 +69,7 @@ terminal FALSE;
 
 non terminal ExpBind bind;
 non terminal ArrayList<ExpBind> bindList;
-
+non terminal Exp let;
 non terminal ExpLit bool;
 
 non terminal Exp expression, expSeq, addSub, boolExp, cmp, bitwise, bitNot, term, factor;
@@ -119,7 +119,7 @@ stmt ::= expression:e SEMI {: RESULT = new Statement(e); :} |
 	 	 definition:d {: RESULT = d; :} |
 		 funcDefn:f {: RESULT = f; :};
 
-cmpExp ::= expression:e1 COND:c expression:e2 {: :};
+cmpExp ::= expression:e1 COND:c expression:e2 {: :} expression:e1 EQUAL expression:e2 {: :};
 
 funcDefn ::= DEF VAR:var PROC LPAREN paramListE:pList RPAREN LBRACE stmtList:seq RBRACE
 		 	 {: RESULT = new StmtFuncDefinition(var, pList, seq); :};
@@ -166,7 +166,7 @@ boolExp ::= boolExp:b AND cmp:c {: RESULT = new ExpAnd(b, c); :} |
 			cmp:c {: RESULT = c; :};
 
 cmp ::= cmp:c COND:cond bitwise:b {: RESULT = new ExpCmp(cond, c, b); :} |
-		bitwise:b {: RESULT = b; :};
+		bitwise:b {: RESULT = b; :} | cmp:c EQUAL bitwise:b {: RESULT = new ExpCmp("EQUAL", c, b); :};
 
 bitwise ::= bitwise:b BIT_AND addSub:t {: RESULT = new ExpBitAnd(b, t);:} |
 			bitwise:b BIT_OR  addSub:t {: RESULT = new ExpBitOr(b, t); :} |			

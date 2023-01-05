@@ -132,7 +132,7 @@ VAR_COMP = {ALPHANUM}|{SYMBOLS}
 <YYINITIAL> {WHITESPACE}">="{WHITESPACE}	{return new Symbol(sym.COND, "GE");}
 <YYINITIAL> {WHITESPACE}"<="{WHITESPACE}	{return new Symbol(sym.COND, "LE");}
 <YYINITIAL> {WHITESPACE}"!="{WHITESPACE}	{return new Symbol(sym.COND, "NE");}
-<YYINITIAL> {WHITESPACE}"="{WHITESPACE}	    {return new Symbol(sym.COND, "EQUAL");}
+<YYINITIAL> {WHITESPACE}"="{WHITESPACE}	    {return new Symbol(sym.EQUAL);}
 
 <YYINITIAL> "("		{return new Symbol(sym.LPAREN);}
 <YYINITIAL> ")"		{return new Symbol(sym.RPAREN);}

@@ -471,5 +471,27 @@ public class Evaluator implements Visitor<Environment<SmplType>, SmplType>
 				return null;
 			}
 		}		
+	}
+
+	@Override
+	public SmplType visitExpBind(ExpBind expBind, Environment<SmplType> arg) throws VisitException {
+		Exp ep = expBind.getExp();
+		SmplType result = ep.visit(this, arg);
+		arg.put(expBind.getId(), result);
+		return result;
+	}
+
+	@Override
+	public SmplType visitExpLet(ExpLet expLet, Environment<SmplType> arg) throws VisitException {
+	
+		Environment letenv = new Environment(arg);
+		
+		// evaluate bindings with new environment
+		ArrayList<ExpBind> bindings = expLet.getBinds();
+		for (int i = 0; i < bindings.size(); i++) {
+			bindings.get(i).visit(this, letenv);
+		}
+
+		return expLet.getBody().visit(this, letenv);
 	}  
 }

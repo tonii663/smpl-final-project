@@ -44,6 +44,7 @@ scan with {:
 terminal COLON, LPAREN, RPAREN, LBRACE, RBRACE, LBRACKET, RBRACKET, LB_COLON, RB_COLON;
 terminal IS_PAIR, PAIR, CAR, CDR, LIST, SIZE, EQV, EQL, SUBSTR, DEF, PROC, NIL;
 terminal PRINT, PRINTLN, READ, READINT;
+terminal LET;
 
 // Arithmetic operators
 terminal PLUS, MINUS, MUL, DIV, MOD;
@@ -65,6 +66,9 @@ terminal Character CHAR;
 
 terminal TRUE;
 terminal FALSE;
+
+non terminal ExpBind bind;
+non terminal ArrayList<ExpBind> bindList;
 
 non terminal ExpLit bool;
 
@@ -213,7 +217,21 @@ ops ::= SIZE LPAREN expression:e RPAREN {: RESULT = new ExpOps("size", e); :} |
 		SUBSTR LPAREN expression:s COMMA expression:start COMMA expression:end RPAREN
 		{: RESULT = new ExpOps("substr", s, start, end); :};
 
+//Added - New 
+let ::= LET LPAREN bindList:blst RPAREN stmtList:body {: RESULT = new ExpLet(blst,body); :};
 
+//used in let definition
+bind ::= VAR:v EQUAL exptop:e {: RESULT = new ExpBind(v,e); :};
+
+bindList ::= bindList:blst COMMA bind:b {: blst.add(b);
+			RESULT = blst; :} |
+		bind:b {:
+				ArrayList<ExpBind> result = new ArrayList<>();
+				result.add(b); 
+				RESULT = result;
+			:} | {: ArrayList<ExpBind> result = new ArrayList<>();
+				RESULT = result; :};
+// addition let
 list ::= LBRACKET argListE:aList RBRACKET
 	   	 {: RESULT = new ExpLit(aList, "smpl-list"); :} |
 		 LIST LPAREN argListE:aList RPAREN

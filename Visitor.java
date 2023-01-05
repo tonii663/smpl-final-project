@@ -44,6 +44,10 @@ public interface Visitor<S, T>
 	
 	public T visitExpVectorParam(ExpVectorParam exp, S state) throws VisitException;
 	public T visitExpVectorParamList(ExpVectorParamList exp, S state) throws VisitException;
+
+    public T visitExpBind(ExpBind expBind, S arg) throws VisitException;
+
+    public T visitExpLet(ExpLet expLet, S arg) throws VisitException;
 	
 	// public T visitExpPair(ExpPair exp, S state);
 	// public T visitExpList(ExpList exp, S state);

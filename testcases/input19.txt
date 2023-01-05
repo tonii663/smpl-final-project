@@ -1,0 +1,8 @@
+println("*** Multivalue test ... ***")
+def xt 5;
+def yt 7;
+def multi proc(u, v) (u/v, u%v);
+print("before: xt, yt = ("); print(xt); print(", "); print(yt); print(")");
+xt, yt := multi(yt, xt);
+print("after: xt, yt = ("); print(xt); print(", "); print(yt); print(")");
+println("*** End of Multivalue test ***");

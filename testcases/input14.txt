@@ -1,0 +1,35 @@
+// assignment tests
+print("*** Assignment Tests ***\n");
+def x 1 ; print("after def: x = "); print(x) ; println ("... Should be 1");
+x := 3 ; 
+print("after assgn: x = "); print(x); println("... Should be 3");
+def f proc(n) proc(x) n + x ;
+def g f(2);
+print("Should print 5...");
+print(g(3)) ; print("\n");
+f := f(g(3)) ;
+print("Should print 8...");
+print(f(3)) ; print("\n");
+
+println("Non-local assignment test...");
+print("before: x = "); print(x); println("... Should still be 3");
+
+def h proc(n) { x := n; n };
+println("Changing x to "); print(h(x + 1));
+print("after: x = "); print(x); println("... Should be 1 more");
+
+println("Internal def assignment test...");
+def a 3;
+def assgn_test proc(n) {
+   def a 7;
+   print("a ="); print(a); print("Should be 7 not 3"); print("\n");
+   a := n;
+   print("a ="); print(a); 
+   print(" Should be "); print(n); print(" not 7 or 3"); print("\n");
+   }
+
+print("a ="); print(a); print("Should be 3"); print("\n");
+assgn_test(5);
+print("a ="); print(a); print("Should be 3"); print("\n");
+
+print("*** End of Assignment tests ***\n");

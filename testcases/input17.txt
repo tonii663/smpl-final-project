@@ -1,0 +1,8 @@
+// nestable comments
+println("*** Nestable Comments ***");
+println("Should print 2:");
+print( 1 /* 
+	   + 1 + /* 1 + 2 */
+	   + 4 */
+	   + 1); print("\n");
+println("*** End of Nestable Comments ***");

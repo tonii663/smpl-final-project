@@ -1,0 +1,27 @@
+// let tests
+print("*** let tests ***\n");
+print(let(x = 1) x + 1) ; print("\n");
+def a 0;
+print(let(f = proc(n) n * n)
+	let (a = f(5))
+	   a) ;
+print("\n");
+def a 3; def b 7; def f proc(n) n + 1;
+let(b = 5,
+    f = (proc(n) a * n),
+    a = f(b)) {
+  print("a= "); print(a); 
+  print("Should be 8, not 3, 15, 21 or 6"); print("\n");
+  print("b= "); print(b); println("Should be 5 not 7");
+  print("\n");
+  print("f(b) = "); print(f(b)); print (" should be 15, not 6 or 40"); print("\n");
+  };
+
+print("should be 5 not 4...");
+def f proc(n) n + 1 ;
+print(
+	let(f = proc(n) if n < 1 then 1 else 1 + f(n - 2))
+	  f(5)
+) ;
+print("\n");
+print("*** end of let tests ***\n");

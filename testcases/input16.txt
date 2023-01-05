@@ -1,0 +1,6 @@
+// characters
+println("*** Character Tests ***");
+print("char a = ["); print(#ca); print("]\n");
+print("char nl = ["); print(#c\n); print("]\n");
+print("char tab = ["); print(#c\t); print("]\n");
+println("*** End of Character Tests ***");

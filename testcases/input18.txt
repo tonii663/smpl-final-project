@@ -1,0 +1,15 @@
+// variable arity procedures
+println("*** Variable Arity Procedures ***");
+def f proc(y, z) pair(y, z);
+def g proc(y . z) [y, z];
+print("f(1, 2) = "); print(call(f, [1, 2])); println("Should be (1 . 2)"); 
+print("g(1, 2, 3, 4) = "); print(g(1, 2, 3, 4));
+println("Should be [1, [2, 3, 4]]");
+print("call(g, [1, 2, 3]) = "); print(call(g, [1, 2, 3]));
+println("Should be [1, [2, 3]]");
+
+def double proc(x) 2 * x;
+print("call(g, map(double, [1, 2, 3])) = ");
+print(call(g, map(double, [1, 2, 3])));
+println("Should be [2, [4, 6]]");
+println("*** End of Variable Arity Procedures ***");

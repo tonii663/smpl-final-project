@@ -1,0 +1,20 @@
+// def within proc
+println("*** Def within proc tests ***");
+def a 5;
+def f proc(n) {
+    def a 3;
+    def g proc(x) {
+	println("<now in g>:");
+	print("x = "); println(x);
+	print("n = "); println(n);
+	print("x + a * n = ");
+	print(x + a * n); print("\t");
+	print("Should be 3n + x"); print("\n");
+	println("<leaving g>...");
+	x + a * n
+	};
+    g(1);
+}
+print("f(2) = "); print(f(2)); print("Should be 7"); print("\n");
+print("a = "); print(a); print("Should be 5"); print("\n");
+println("*** End of Internal Def Test ***");

@@ -1,0 +1,17 @@
+// case expression
+println("*** Case Expression Tests ***");
+def x 3;
+def f proc(x)
+  case {
+     x < 0: print ("x is negative\n"),
+     x = 0: print ("x is zero\n"),
+     else: print ("x is positive\n")
+  };
+
+print("Should print x is negative...");
+print(f(-1)); print("\n");
+print("Should print x is zero...");
+print(f(0)); print("\n");
+print("Should print x is positive");
+print(f(1)); print("\n");
+println("*** End of Case Tests ***");

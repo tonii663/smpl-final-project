@@ -221,7 +221,7 @@ ops ::= SIZE LPAREN expression:e RPAREN {: RESULT = new ExpOps("size", e); :} |
 let ::= LET LPAREN bindList:blst RPAREN stmtList:body {: RESULT = new ExpLet(blst,body); :};
 
 //used in let definition
-bind ::= VAR:v EQUAL exptop:e {: RESULT = new ExpBind(v,e); :};
+bind ::= VAR:v EQUAL expression:e {: RESULT = new ExpBind(v,e); :};
 
 bindList ::= bindList:blst COMMA bind:b {: blst.add(b);
 			RESULT = blst; :} |

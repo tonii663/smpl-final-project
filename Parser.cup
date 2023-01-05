@@ -193,6 +193,7 @@ factor ::= funcCall:f {: RESULT = f; :} |
 		   pair:p {: RESULT = p; :} |
 		   vector:v {: RESULT = v; :} |
 		   list:l {: RESULT = l; :} |
+		   let:le {: RESULT = le; :} |
 		   ops:o {: RESULT = o; :} |
 		   print:p {: RESULT = p; :} |
 		   read:r {: RESULT = r; :} |

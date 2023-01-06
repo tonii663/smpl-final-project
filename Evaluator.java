@@ -66,7 +66,7 @@ public class Evaluator implements Visitor<Environment<SmplType>, SmplType>
 	}
 
 	public SmplType visitExpFuncCall(ExpFuncCall exp, Environment<SmplType> state) throws VisitException
-	{
+	{	try {
 		SmplType result;
 		
 		ArrayList<Exp> args = exp.getSubTrees();
@@ -75,7 +75,7 @@ public class Evaluator implements Visitor<Environment<SmplType>, SmplType>
 		
 		if(fun.getParamsCount() != args.size())
 		{
-			throw new UnboundVarException(fun.getName());
+			throw new Exception("Pararameter count must equal function arguement count of "+fun.getName());
 		}
 
 		ArrayList<String> params = fun.getParams();
@@ -91,6 +91,80 @@ public class Evaluator implements Visitor<Environment<SmplType>, SmplType>
 		result = fun.getBody().visit(this, child);
 
 		return result;
+	  }
+	  catch(UnboundVarException e) {
+		// If closure not in it might be a proc call in that case we try to resolve the varibale 
+		// with a body 
+		// eg. def x = proc(a) a+1;
+		// x(1); Notice called like a function 
+		ProcClosure close;
+		SmplProc p;
+		try {
+			p = SmplProc.class.cast(state.get(exp.getName()));
+			close = p.getValue();
+		} catch (Exception ee) {
+			throw new VisitException(
+					String.format("%s is not a procedure and cannot be called", state.get(exp.getName())), ee);
+		}
+
+		ExpProc fun = close.getProc();
+		ProcForm form = fun.getForm();
+		ArrayList<String> params = fun.getParams();
+
+		// evaluate arguments passed
+		ArrayList<SmplType> vals = new ArrayList<SmplType>();
+		ArrayList<Exp> args = exp.getArgList();
+
+		switch (form) {
+			case formal:
+				// Since formal if 
+				if (args.size() != params.size()) {
+					throw new VisitException(
+							String.format("%s takes %d %s but %d %s passed", p.toString(),
+									params.size(), params.size() == 1 ? "argument" : "arguments", args.size(),
+									args.size() == 1 ? "argument was" : "arguments were"));
+				} else {
+					for (int i = 0; i < args.size(); i++) {
+						vals.add(args.get(i).visit(this, state));
+					}
+				}
+
+				break;
+
+			case argandList:
+				int j = 0;
+				for (j = 0; j < params.size() - 1; j++) {
+					vals.add(args.get(j).visit(this, state));
+				}
+
+				ArrayList<SmplType> rest = new ArrayList<>();
+				if (args.size() > params.size() - 1) {
+					for (j = j; j < args.size(); j++) {
+						rest.add(args.get(j).visit(this, state));
+					}
+				}
+				vals.addAll(rest);
+				break;
+
+			case varArg:
+				ArrayList<SmplType> vararg = new ArrayList<>();
+				for (int i = 0; i < args.size(); i++) {
+					vararg.add(args.get(i).visit(this, state));
+				}
+				vals.addAll(vararg);
+				break;
+
+		}
+
+		Environment env2 = new Environment(close.getClosingEnv(), params, vals);
+		
+		return fun.getExpression().visit(this, env2);
+		
+	  }
+	  catch(Exception e){
+		return new SmplNil();
+	  }
+		
 	}	
 
 	public SmplType visitExpBitAnd(ExpBitAnd exp, Environment<SmplType> state) throws VisitException

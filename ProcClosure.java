@@ -1,10 +1,11 @@
-public class ProcClosure<T>
+public class ProcClosure<T> 
 {
     private ExpProc proc;
     private Environment<T> closingEnv;
 
     public ProcClosure(ExpProc fun, Environment<T> env)
 	{
+    
 		proc = fun;
 		closingEnv = env;
     }

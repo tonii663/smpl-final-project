@@ -602,7 +602,7 @@ public class Evaluator implements Visitor<Environment<SmplType>, SmplType>
 		}
 		return null;
 	}
-	}
+	
 
 	@Override
 	public SmplType visitExpProc(ExpProc expProc, Environment<SmplType> arg) throws VisitException {
@@ -610,3 +610,4 @@ public class Evaluator implements Visitor<Environment<SmplType>, SmplType>
 		return new SmplProc(close);
 	}  
 }
+

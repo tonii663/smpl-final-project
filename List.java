@@ -26,8 +26,15 @@ public class List
 		}
 		else
 		{
+			//Recursively make a list 
 			return new SmplPair(data.get(index), makeList(data, index+1));
 		}
+	}
+
+	public void addAll(List value) {
+		//TODO Modified
+		this.list = new SmplPair(this.list,value.getData());
+		
 	}
 }
 

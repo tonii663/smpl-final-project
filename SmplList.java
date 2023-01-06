@@ -1,5 +1,7 @@
 import java.util.ArrayList;
 
+import javax.sound.sampled.AudioFileFormat.Type;
+
 
 public class SmplList extends SmplType<List>
 {
@@ -38,4 +40,15 @@ public class SmplList extends SmplType<List>
 		result += " ]";
 		return result;		
 	}
+
+	@Override
+    public SmplList concat(SmplType o) throws TypeException {
+		//TODO Modified
+        if (o.getClass() == SmplList.class) {
+            super.getValue().addAll(SmplList.class.cast(o).getValue());
+            return this;
+        }else {
+            throw new TypeException(o.toString() + " is not a list");
+        }
+    }
 }

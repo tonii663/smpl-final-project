@@ -170,7 +170,7 @@ cmp ::= cmp:c COND:cond bitwise:b {: RESULT = new ExpCmp(cond, c, b); :} |
 
 bitwise ::= bitwise:b BIT_AND addSub:t {: RESULT = new ExpBitAnd(b, t);:} |
 			bitwise:b BIT_OR  addSub:t {: RESULT = new ExpBitOr(b, t); :} |			
-			addSub:t {: RESULT = t; :};
+			addSub:t {: RESULT = t; :} | bitwise:b AT list:l {: RESULT = new ExpConcat(b,l); :};
 
 addSub ::= addSub:a PLUS  term:b {: RESULT = new ExpAdd(a, b); :} |			   
 		   addSub:a MINUS term:b {: RESULT = new ExpSub(a, b); :} |
@@ -231,7 +231,7 @@ bindList ::= bindList:blst COMMA bind:b {: blst.add(b);
 				RESULT = result;
 			:} | {: ArrayList<ExpBind> result = new ArrayList<>();
 				RESULT = result; :};
-// addition let
+// end addition let
 list ::= LBRACKET argListE:aList RBRACKET
 	   	 {: RESULT = new ExpLit(aList, "smpl-list"); :} |
 		 LIST LPAREN argListE:aList RPAREN

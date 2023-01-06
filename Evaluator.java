@@ -493,5 +493,10 @@ public class Evaluator implements Visitor<Environment<SmplType>, SmplType>
 		}
 
 		return expLet.getBody().visit(this, letenv);
+	}
+
+	@Override
+	public SmplType visitExpConcat(ExpConcat expConcat, Environment<SmplType> arg) throws VisitException {
+		return expConcat.getLeft().visit(this, arg).concat(expConcat.getRight().visit(this, arg));
 	}  
 }

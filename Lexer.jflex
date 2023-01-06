@@ -165,7 +165,9 @@ VAR_COMP = {ALPHANUM}|{SYMBOLS}
 <YYINITIAL> "read"      {return new Symbol(sym.READ);}
 <YYINITIAL> "readInt"   {return new Symbol(sym.READINT);}
 //Added-new
+<YYINITIAL> "case"      {return new Symbol(sym.CASE);}
 <YYINITIAL>	"let"       {return new Symbol(sym.LET);}
+
 <YYINITIAL> "and"       {return new Symbol(sym.AND);}
 <YYINITIAL> "or"        {return new Symbol(sym.OR);}
 <YYINITIAL> "not"       {return new Symbol(sym.NOT);}

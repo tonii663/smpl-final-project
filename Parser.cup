@@ -218,7 +218,7 @@ ops ::= SIZE LPAREN expression:e RPAREN {: RESULT = new ExpOps("size", e); :} |
 		{: RESULT = new ExpOps("substr", s, start, end); :};
 
 //Added - New 
-let ::= LET LPAREN bindList:blst RPAREN expression:body {: RESULT = new ExpLet(blst,body); :};
+let ::= LET LPAREN bindList:blst RPAREN expression:body {: RESULT = new ExpLet(blst,body); :} | LET LPAREN bindList:blst RPAREN LBRACE stmtList:body RBRACE {: RESULT = new ExpLet(blst,body); :} ;
 
 //used in let definition
 bind ::= VAR:v EQUAL expression:e {: RESULT = new ExpBind(v,e); :};

@@ -1,2 +1,3 @@
 print("*** let tests ***\n");
 print(let(x = 1) x + 1) ; print("\n");
+print(let(x = 1) {print("first\n");print(x + 1);x + 2;}) ;

@@ -155,7 +155,7 @@ bool ::= TRUE {: RESULT = new ExpLit(true, "smpl-boolean"); :} |
 
 expression ::= boolExp:b {: RESULT = b; :} |
 		   	   expSeq:seq {: RESULT = seq; :} |
-			   VAR:var ASSIGN expression:e {: RESULT = new ExpAssign(var, e); :};
+			   VAR:var ASSIGN expression:e {: RESULT = new ExpAssign(var, e); :} |let:le {: RESULT = le; :};
 
 expSeq ::= LBRACE argList:seq RBRACE
 	   	   {: RESULT = new ExpSeq(seq); :};
@@ -193,7 +193,6 @@ factor ::= funcCall:f {: RESULT = f; :} |
 		   pair:p {: RESULT = p; :} |
 		   vector:v {: RESULT = v; :} |
 		   list:l {: RESULT = l; :} |
-		   let:le {: RESULT = le; :} |
 		   ops:o {: RESULT = o; :} |
 		   print:p {: RESULT = p; :} |
 		   read:r {: RESULT = r; :} |
@@ -219,8 +218,7 @@ ops ::= SIZE LPAREN expression:e RPAREN {: RESULT = new ExpOps("size", e); :} |
 		{: RESULT = new ExpOps("substr", s, start, end); :};
 
 //Added - New 
-let ::= LET LPAREN bindList:blst RPAREN stmtList:l{: RESULT = new ExpLit(10, "smpl-integer"); :} | 
-LET LPAREN bindList:blst RPAREN{: RESULT = new ExpLit(12, "smpl-integer"); :};
+let ::= LET LPAREN bindList:blst RPAREN expression:body {: RESULT = new ExpLet(blst,body); :};
 
 //used in let definition
 bind ::= VAR:v EQUAL expression:e {: RESULT = new ExpBind(v,e); :};

@@ -8,6 +8,11 @@ public class ExpLet extends Exp {
         binding=binds;
         body=bod;
     }
+    public ExpLet(ArrayList<ExpBind> binds, Exp bod ){
+        super("bind",bod);
+        binding=binds;
+        body= new StatementSequence(new Statement(bod));
+    }
 
     public ArrayList<ExpBind> getBinds(){
         return binding;

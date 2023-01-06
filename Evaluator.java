@@ -498,5 +498,11 @@ public class Evaluator implements Visitor<Environment<SmplType>, SmplType>
 	@Override
 	public SmplType visitExpConcat(ExpConcat expConcat, Environment<SmplType> arg) throws VisitException {
 		return expConcat.getLeft().visit(this, arg).concat(expConcat.getRight().visit(this, arg));
+	}
+
+	@Override
+	public SmplType visitExpProc(ExpProc expProc, Environment<SmplType> arg) throws VisitException {
+		ProcClosure close = new ProcClosure(expProc, arg);
+		return new SmplProc(close);
 	}  
 }

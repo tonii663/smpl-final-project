@@ -1,0 +1,16 @@
+// proc tests
+print("*** proc tests ***\n");
+//proc(x) x + 1 ;
+//proc(x) proc(n) x + n ;
+print("Above print");
+print(proc(x) x(x)) ; print("\n");
+print("*** End of proc tests ***\n");
+
+
+// call tests
+//print ("*** procedure application tests ***\n");
+//print ("Should print 3...\n");
+//print((proc(n) n + 1)(2)); print("\n");
+//print("Should print 81...\n");
+//print((proc(f,x) (proc(m) f(f(m)))(x))(proc(n) n * n, 3)); print("\n");
+//println("*** End of procedure application tests ***");

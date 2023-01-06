@@ -50,6 +50,8 @@ public interface Visitor<S, T>
     public T visitExpLet(ExpLet expLet, S arg) throws VisitException;
 
     public T visitExpConcat(ExpConcat expConcat, S arg) throws VisitException;
+
+    public T visitExpProc(ExpProc expProc, S arg) throws VisitException;
 	
 	// public T visitExpPair(ExpPair exp, S state);
 	// public T visitExpList(ExpList exp, S state);

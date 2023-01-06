@@ -50,7 +50,7 @@ terminal LET;
 terminal PLUS, MINUS, MUL, DIV, MOD;
 terminal AND, OR, NOT;
 terminal BIT_AND, BIT_OR, BIT_NOT;
-terminal SEMI, AT;
+terminal SEMI, AT, DOT;
 
 // Comparators
 terminal String COND; // GT, LT, GE, LE, NE;
@@ -71,6 +71,7 @@ non terminal ExpBind bind;
 non terminal ArrayList<ExpBind> bindList;
 non terminal Exp let;
 non terminal ExpLit bool;
+non terminal Exp proc;
 
 non terminal Exp expression, expSeq, addSub, boolExp, cmp, bitwise, bitNot, term, factor;
 non terminal Statement stmt;
@@ -150,12 +151,29 @@ argList ::= argList:seq COMMA expression:e  {: seq.add(e); RESULT = seq; :} |
 argListE ::= argList:aList {: RESULT = aList; :} |
 		 	 empty {: RESULT = new ArrayList<Exp>(); :};		   
 
+//Start Proc 
+//TODO Change out hardcoded decoration
+proc ::= PROC VAR:v expression:body {: 
+			ArrayList<String> arr = new ArrayList<>();
+			arr.add(v);
+			RESULT = new ExpProc(arr,body, ProcForm.varArg); 
+		:} |
+		PROC LPAREN paramListE:plst RPAREN expression:e {: 
+			RESULT = new ExpProc(plst,e, ProcForm.formal);
+		:} |
+		PROC LPAREN paramList:plst DOT VAR:v RPAREN expression:body {: 
+			plst.add(v);
+			RESULT = new ExpProc(plst,body, ProcForm.argandList); 
+		:};
+// End Proc
 bool ::= TRUE {: RESULT = new ExpLit(true, "smpl-boolean"); :} |
 	 	 FALSE {: RESULT = new ExpLit(false, "smpl-boolean"); :};
 
 expression ::= boolExp:b {: RESULT = b; :} |
 		   	   expSeq:seq {: RESULT = seq; :} |
-			   VAR:var ASSIGN expression:e {: RESULT = new ExpAssign(var, e); :} |let:le {: RESULT = le; :};
+			   VAR:var ASSIGN expression:e {: RESULT = new ExpAssign(var, e); :} |
+			   let:le {: RESULT = le; :} |
+			   proc:p {:RESULT = p;:};
 
 expSeq ::= LBRACE argList:seq RBRACE
 	   	   {: RESULT = new ExpSeq(seq); :};

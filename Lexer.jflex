@@ -148,6 +148,7 @@ VAR_COMP = {ALPHANUM}|{SYMBOLS}
 <YYINITIAL> ";"		{return new Symbol(sym.SEMI);}
 <YYINITIAL> "@"		{return new Symbol(sym.AT);}
 <YYINITIAL> ","		{return new Symbol(sym.COMMA);}
+<YYINITIAL> "."		{return new Symbol(sym.DOT);}
 
 <YYINITIAL> "pair?"     {return new Symbol(sym.IS_PAIR);}
 <YYINITIAL> "pair"      {return new Symbol(sym.PAIR);}

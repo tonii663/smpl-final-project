@@ -44,7 +44,7 @@ scan with {:
 terminal COLON, LPAREN, RPAREN, LBRACE, RBRACE, LBRACKET, RBRACKET, LB_COLON, RB_COLON;
 terminal IS_PAIR, PAIR, CAR, CDR, LIST, SIZE, EQV, EQL, SUBSTR, DEF, PROC, NIL;
 terminal PRINT, PRINTLN, READ, READINT;
-terminal LET;
+terminal LET, CASE;
 
 // Arithmetic operators
 terminal PLUS, MINUS, MUL, DIV, MOD;
@@ -72,6 +72,12 @@ non terminal ArrayList<ExpBind> bindList;
 non terminal Exp let;
 non terminal ExpLit bool;
 non terminal Exp proc;
+
+
+non terminal ExpClause clause;
+non terminal ArrayList<ExpClause> clauseList;
+non terminal ExpCase case;
+non terminal Exp predicate;
 
 non terminal Exp expression, expSeq, addSub, boolExp, cmp, bitwise, bitNot, term, factor;
 non terminal Statement stmt;
@@ -219,6 +225,7 @@ factor ::= funcCall:f {: RESULT = f; :} |
 		   print:p {: RESULT = p; :} |
 		   
 		   read:r {: RESULT = r; :} |
+		   case:x {: RESULT = x; :} |
 		   VAR:var {: RESULT = new ExpVar(var); :} |
 		   LPAREN expression:e RPAREN {: RESULT = e; :} |		   
 		   LPAREN MINUS expression:e RPAREN {: :};
@@ -237,11 +244,12 @@ ops ::= SIZE LPAREN expression:e RPAREN {: RESULT = new ExpOps("size", e); :} |
 		EQV LPAREN expression:e1 COMMA expression:e2 RPAREN {: RESULT = new ExpOps("eqv", e1, e2); :} |
 		EQL LPAREN expression:e1 COMMA expression:e2 RPAREN {: RESULT = new ExpOps("equ", e1, e2); :} |
 		IS_PAIR LPAREN expression:e RPAREN {: RESULT = new ExpOps("is-pair", e); :} |
-		SUBSTR LPAREN expression:s COMMA expression:start COMMA expression:end RPAREN
-		{: RESULT = new ExpOps("substr", s, start, end); :};
+		SUBSTR LPAREN expression:s COMMA expression:st COMMA expression:end RPAREN {: RESULT = new ExpOps("substr", s, st, end); :};
 
 //Added - New 
-let ::= LET LPAREN bindList:blst RPAREN expression:body {: RESULT = new ExpLet(blst,body); :} | LET LPAREN bindList:blst RPAREN LBRACE stmtList:body RBRACE {: RESULT = new ExpLet(blst,body); :} ;
+let ::= LET LPAREN bindList:blst RPAREN expression:body {: RESULT = new ExpLet(blst,body); :} |
+        LET LPAREN bindList:blst RPAREN LBRACE stmtList:body RBRACE {: RESULT = new ExpLet(blst,body); :};
+
 
 //used in let definition
 bind ::= VAR:v EQUAL expression:e {: RESULT = new ExpBind(v,e); :};
@@ -288,5 +296,19 @@ pair ::= PAIR LPAREN expression:e1 COMMA expression:e2 RPAREN
 			r.add(e2);
 			RESULT = new ExpLit(r, "smpl-pair");
 		:};
+
+
+clause ::= cmp:c COLON print:f {: RESULT = new ExpClause((ExpCmp)c,f); :} |
+           ELSE COLON print:f{: RESULT = new ExpClause(f); :};
+
+clauseList ::= clauseList:cl clause:cp COMMA{: cl.add(cp); RESULT = cl; :} |
+        	   clauseList:cl clause:cp {: cl.add(cp); RESULT = cl; :} |
+        	   clause:cp COMMA{:
+               ArrayList<ExpClause> result = new ArrayList<>();
+               result.add(cp);
+               RESULT = result;
+        	   :};
+
+case ::= CASE LBRACE clauseList:cl RBRACE {: RESULT = new ExpCase(cl); :};
 		
 empty ::= ;

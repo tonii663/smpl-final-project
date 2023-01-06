@@ -575,6 +575,36 @@ public class Evaluator implements Visitor<Environment<SmplType>, SmplType>
 	}
 
 	@Override
+	public SmplType visitExpClause(ExpClause clause, Environment<SmplType> state) throws VisitException
+	{
+		if(clause.getPredicate() != null){
+			return clause.getPredicate().visit(this, state);
+		}
+		return null;
+	}
+
+	@Override
+	public SmplType visitExpCase(ExpCase cases, Environment<SmplType> state) throws VisitException
+	{
+		ArrayList<ExpClause> caseList = cases.getCaseList();
+		for(int c=0; c<caseList.size(); c++) {
+
+			ExpCmp caseVal = caseList.get(c).getPredicate();
+			String res = "false";
+			if (caseList.get(c).isElse() == false){
+				SmplType result = visitExpCmp(caseVal, state);
+				res = String.valueOf(result);
+			}
+
+			if ( res == "true" || caseList.get(c).isElse() == true ){
+				return caseList.get(c).getConsequent().visit(this, state);
+			}
+		}
+		return null;
+	}
+	}
+
+	@Override
 	public SmplType visitExpProc(ExpProc expProc, Environment<SmplType> arg) throws VisitException {
 		ProcClosure close = new ProcClosure(expProc, arg);
 		return new SmplProc(close);

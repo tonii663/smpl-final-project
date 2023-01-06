@@ -77,7 +77,7 @@ non terminal Exp expression, expSeq, addSub, boolExp, cmp, bitwise, bitNot, term
 non terminal Statement stmt;
 non terminal StatementSequence stmtList;
 non terminal StatementDefinition definition;
-
+non terminal Exp procDefCall , procExp;
 non terminal SmplProgram program;
 
 // Function Def
@@ -118,7 +118,7 @@ stmtList ::= stmtList:seq stmt:s {: RESULT = seq.add(s); :} |
 			 
 stmt ::= expression:e SEMI {: RESULT = new Statement(e); :} |
 	 	 definition:d {: RESULT = d; :} |
-		 funcDefn:f {: RESULT = f; :};
+		 funcDefn:f {: RESULT = f; :} ;
 
 cmpExp ::= expression:e1 COND:c expression:e2 {: :} | expression:e1 EQUAL expression:e2 {: :};
 
@@ -140,6 +140,8 @@ definition ::= DEF VAR:var expression:e SEMI {: RESULT = new StatementDefinition
 // expression:e LBRACKET expression:i RBRACKET {: RESULT = new ExpOps("index", e, i); :} |
 
 funcCall ::= VAR:v LPAREN argListE:aList RPAREN {: RESULT = new ExpFuncCall(v, aList); :};
+
+procDefCall ::= LPAREN proc:p RPAREN LPAREN LPAREN argListE:arg RPAREN {:new ExpLit(1000, "smpl-integer");:};
 		   
 argList ::= argList:seq COMMA expression:e  {: seq.add(e); RESULT = seq; :} |
 			 	 expression:e {:
@@ -164,7 +166,8 @@ proc ::= PROC VAR:v expression:body {:
 		PROC LPAREN paramList:plst DOT VAR:v RPAREN expression:body {: 
 			plst.add(v);
 			RESULT = new ExpProc(plst,body, ProcForm.argandList); 
-		:};
+		:} ;
+
 // End Proc
 bool ::= TRUE {: RESULT = new ExpLit(true, "smpl-boolean"); :} |
 	 	 FALSE {: RESULT = new ExpLit(false, "smpl-boolean"); :};
@@ -174,6 +177,7 @@ expression ::= boolExp:b {: RESULT = b; :} |
 			   VAR:var ASSIGN expression:e {: RESULT = new ExpAssign(var, e); :} |
 			   let:le {: RESULT = le; :} |
 			   proc:p {:RESULT = p;:};
+
 
 expSeq ::= LBRACE argList:seq RBRACE
 	   	   {: RESULT = new ExpSeq(seq); :};
@@ -213,6 +217,7 @@ factor ::= funcCall:f {: RESULT = f; :} |
 		   list:l {: RESULT = l; :} |
 		   ops:o {: RESULT = o; :} |
 		   print:p {: RESULT = p; :} |
+		   
 		   read:r {: RESULT = r; :} |
 		   VAR:var {: RESULT = new ExpVar(var); :} |
 		   LPAREN expression:e RPAREN {: RESULT = e; :} |		   

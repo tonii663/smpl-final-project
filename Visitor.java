@@ -48,8 +48,6 @@ public interface Visitor<S, T>
     public T visitExpBind(ExpBind expBind, S arg) throws VisitException;
 
     public T visitExpLet(ExpLet expLet, S arg) throws VisitException;
-
-    public T visitExpConcat(ExpConcat expConcat, S arg) throws VisitException;
 	
 	// public T visitExpPair(ExpPair exp, S state);
 	// public T visitExpList(ExpList exp, S state);

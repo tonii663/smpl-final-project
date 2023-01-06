@@ -152,9 +152,4 @@ public abstract class SmplType<T>
 	{
 		throw new TypeException();
 	}
-
-	public SmplType concat (SmplType v  ) throws TypeException
-	{
-		throw new TypeException();
-	}
 }

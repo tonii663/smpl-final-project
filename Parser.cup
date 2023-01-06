@@ -219,7 +219,8 @@ ops ::= SIZE LPAREN expression:e RPAREN {: RESULT = new ExpOps("size", e); :} |
 		{: RESULT = new ExpOps("substr", s, start, end); :};
 
 //Added - New 
-let ::= LET LPAREN bindList:blst RPAREN stmtList:body {: RESULT = new ExpLet(blst,body); :};
+let ::= LET LPAREN bindList:blst RPAREN stmtList:l{: RESULT = new ExpLit(10, "smpl-integer"); :} | 
+LET LPAREN bindList:blst RPAREN{: RESULT = new ExpLit(12, "smpl-integer"); :};
 
 //used in let definition
 bind ::= VAR:v EQUAL expression:e {: RESULT = new ExpBind(v,e); :};

@@ -1,0 +1,4 @@
+print("*** let tests ***\n");
+//let(x = 1) x + 1;;
+//print(let(x = 1) 1 + x;);
+print(let(x = 1));

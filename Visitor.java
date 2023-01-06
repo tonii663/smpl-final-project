@@ -15,7 +15,10 @@ public interface Visitor<S, T>
 	public T visitStatementDefinition(StatementDefinition def, S state) throws VisitException;
 	
 	public T visitExpFuncCall(ExpFuncCall exp, S state) throws VisitException;
-		
+	
+	public T visitExpClause(ExpClause clause, S state) throws VisitException;
+	public T visitExpCase(ExpCase cases, S state) throws VisitException;
+	
 	public T visitExpAdd(ExpAdd exp, S state) throws VisitException;
 	public T visitExpSub(ExpSub exp, S state) throws VisitException;
 	public T visitExpMul(ExpMul exp, S state) throws VisitException;
@@ -44,6 +47,10 @@ public interface Visitor<S, T>
 	
 	public T visitExpVectorParam(ExpVectorParam exp, S state) throws VisitException;
 	public T visitExpVectorParamList(ExpVectorParamList exp, S state) throws VisitException;
+
+    public T visitExpBind(ExpBind expBind, S arg) throws VisitException;
+
+    public T visitExpLet(ExpLet expLet, S arg) throws VisitException;
 	
 	// public T visitExpPair(ExpPair exp, S state);
 	// public T visitExpList(ExpList exp, S state);

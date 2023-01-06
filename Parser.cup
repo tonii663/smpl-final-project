@@ -42,8 +42,9 @@ scan with {:
 
 
 terminal COLON, LPAREN, RPAREN, LBRACE, RBRACE, LBRACKET, RBRACKET, LB_COLON, RB_COLON;
-terminal IS_PAIR, PAIR, CAR, CDR, LIST, SIZE, EQV, EQL, SUBSTR, DEF, PROC, NIL;
+terminal IS_PAIR, PAIR, CAR, CDR, LIST, SIZE, EQV, EQL, SUBSTR, DEF, PROC, NIL, CASE;
 terminal PRINT, PRINTLN, READ, READINT;
+terminal LET;
 
 // Arithmetic operators
 terminal PLUS, MINUS, MUL, DIV, MOD;
@@ -66,6 +67,9 @@ terminal Character CHAR;
 terminal TRUE;
 terminal FALSE;
 
+non terminal ExpBind bind;
+non terminal ArrayList<ExpBind> bindList;
+non terminal Exp let;
 non terminal ExpLit bool;
 
 non terminal Exp expression, expSeq, addSub, boolExp, cmp, bitwise, bitNot, term, factor;
@@ -104,6 +108,11 @@ non terminal Exp print, println, read, readInt;
 non terminal StmtIf, stmtIf, stmtElse;
 non terminal Exp cmpExp; 
 
+non terminal ExpClause clause;
+non terminal ArrayList<ExpClause> clauseList;
+non terminal ExpCase case;
+non terminal Exp predicate;
+
 non terminal empty;
 
 program ::= stmtList:seq {: RESULT = new SmplProgram(seq); :};
@@ -113,9 +122,10 @@ stmtList ::= stmtList:seq stmt:s {: RESULT = seq.add(s); :} |
 			 
 stmt ::= expression:e SEMI {: RESULT = new Statement(e); :} |
 	 	 definition:d {: RESULT = d; :} |
-		 funcDefn:f {: RESULT = f; :};
+		 funcDefn:f {: RESULT = f; :} ;
+		 
 
-cmpExp ::= expression:e1 COND:c expression:e2 {: :};
+cmpExp ::= expression:e1 COND:c expression:e2 {: :} | expression:e1 EQUAL expression:e2 {: :};
 
 funcDefn ::= DEF VAR:var PROC LPAREN paramListE:pList RPAREN LBRACE stmtList:seq RBRACE
 		 	 {: RESULT = new StmtFuncDefinition(var, pList, seq); :};
@@ -151,7 +161,10 @@ bool ::= TRUE {: RESULT = new ExpLit(true, "smpl-boolean"); :} |
 
 expression ::= boolExp:b {: RESULT = b; :} |
 		   	   expSeq:seq {: RESULT = seq; :} |
-			   VAR:var ASSIGN expression:e {: RESULT = new ExpAssign(var, e); :};
+			   VAR:var ASSIGN expression:e {: RESULT = new ExpAssign(var, e); :} |
+			   let:le {: RESULT = le; :};
+			   
+			   
 
 expSeq ::= LBRACE argList:seq RBRACE
 	   	   {: RESULT = new ExpSeq(seq); :};
@@ -162,7 +175,7 @@ boolExp ::= boolExp:b AND cmp:c {: RESULT = new ExpAnd(b, c); :} |
 			cmp:c {: RESULT = c; :};
 
 cmp ::= cmp:c COND:cond bitwise:b {: RESULT = new ExpCmp(cond, c, b); :} |
-		bitwise:b {: RESULT = b; :};
+		bitwise:b {: RESULT = b; :} | cmp:c EQUAL bitwise:b {: RESULT = new ExpCmp("EQUAL", c, b); :};
 
 bitwise ::= bitwise:b BIT_AND addSub:t {: RESULT = new ExpBitAnd(b, t);:} |
 			bitwise:b BIT_OR  addSub:t {: RESULT = new ExpBitOr(b, t); :} |			
@@ -192,6 +205,7 @@ factor ::= funcCall:f {: RESULT = f; :} |
 		   ops:o {: RESULT = o; :} |
 		   print:p {: RESULT = p; :} |
 		   read:r {: RESULT = r; :} |
+		   case:x {: RESULT = x; :} |
 		   VAR:var {: RESULT = new ExpVar(var); :} |
 		   LPAREN expression:e RPAREN {: RESULT = e; :} |		   
 		   LPAREN MINUS expression:e RPAREN {: :};
@@ -213,7 +227,21 @@ ops ::= SIZE LPAREN expression:e RPAREN {: RESULT = new ExpOps("size", e); :} |
 		SUBSTR LPAREN expression:s COMMA expression:start COMMA expression:end RPAREN
 		{: RESULT = new ExpOps("substr", s, start, end); :};
 
+//Added - New 
+let ::= LET LPAREN bindList:blst RPAREN expression:body {: RESULT = new ExpLet(blst,body); :} | LET LPAREN bindList:blst RPAREN LBRACE stmtList:body RBRACE {: RESULT = new ExpLet(blst,body); :} ;
 
+//used in let definition
+bind ::= VAR:v EQUAL expression:e {: RESULT = new ExpBind(v,e); :};
+
+bindList ::= bindList:blst COMMA bind:b {: blst.add(b);
+			RESULT = blst; :} |
+		bind:b {:
+				ArrayList<ExpBind> result = new ArrayList<>();
+				result.add(b); 
+				RESULT = result;
+			:} | {: ArrayList<ExpBind> result = new ArrayList<>();
+				RESULT = result; :};
+// addition let
 list ::= LBRACKET argListE:aList RBRACKET
 	   	 {: RESULT = new ExpLit(aList, "smpl-list"); :} |
 		 LIST LPAREN argListE:aList RPAREN
@@ -247,5 +275,20 @@ pair ::= PAIR LPAREN expression:e1 COMMA expression:e2 RPAREN
 			r.add(e2);
 			RESULT = new ExpLit(r, "smpl-pair");
 		:};
+
+//predicate ::= VAR:v COND:c INT:i {: RESULT = new ExpCmp(c, v, i); :} | VAR:v EQUAL INT:i {: RESULT = new ExpCmp("EQUAL", v, i); :};
+
+clause ::= cmp:c COLON print:f {: RESULT = new ExpClause((ExpCmp)c,f); :} |
+			 ELSE COLON print:f{: RESULT = new ExpClause(f); :};
+
+clauseList ::= clauseList:cl clause:cp COMMA{: cl.add(cp); RESULT = cl; :} |
+				clauseList:cl clause:cp {: cl.add(cp); RESULT = cl; :} |
+			 	 clause:cp COMMA{:
+					ArrayList<ExpClause> result = new ArrayList<>();
+					result.add(cp);
+					RESULT = result;
+			:};
+
+case ::= CASE LBRACE clauseList:cl RBRACE {: RESULT = new ExpCase(cl); :};
 		
 empty ::= ;

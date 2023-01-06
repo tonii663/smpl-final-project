@@ -132,7 +132,7 @@ VAR_COMP = {ALPHANUM}|{SYMBOLS}
 <YYINITIAL> {WHITESPACE}">="{WHITESPACE}	{return new Symbol(sym.COND, "GE");}
 <YYINITIAL> {WHITESPACE}"<="{WHITESPACE}	{return new Symbol(sym.COND, "LE");}
 <YYINITIAL> {WHITESPACE}"!="{WHITESPACE}	{return new Symbol(sym.COND, "NE");}
-<YYINITIAL> {WHITESPACE}"="{WHITESPACE}	    {return new Symbol(sym.COND, "EQUAL");}
+<YYINITIAL> {WHITESPACE}"="{WHITESPACE}	    {return new Symbol(sym.EQUAL);}
 
 <YYINITIAL> "("		{return new Symbol(sym.LPAREN);}
 <YYINITIAL> ")"		{return new Symbol(sym.RPAREN);}
@@ -164,7 +164,10 @@ VAR_COMP = {ALPHANUM}|{SYMBOLS}
 <YYINITIAL> "println"   {return new Symbol(sym.PRINTLN);}
 <YYINITIAL> "read"      {return new Symbol(sym.READ);}
 <YYINITIAL> "readInt"   {return new Symbol(sym.READINT);}
+<YYINITIAL> "case"      {return new Symbol(sym.CASE);}
 
+//Added-new
+<YYINITIAL>	"let"       {return new Symbol(sym.LET);}
 <YYINITIAL> "and"       {return new Symbol(sym.AND);}
 <YYINITIAL> "or"        {return new Symbol(sym.OR);}
 <YYINITIAL> "not"       {return new Symbol(sym.NOT);}
